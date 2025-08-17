@@ -68,8 +68,7 @@ The `renderme_360_reader.py` provides low-level access to data but:
 renderme_360_reader.py (Base Library)
            ↓
     Our Extraction Layer
-    ├── extract_0026_data.py         # Flexible main script
-    ├── extract_0026_FULL.py         # Dedicated full extraction
+    ├── extract_0026_FULL.py         # Full extraction with separation
     ├── extract_for_avatar_research.py # Research-optimized
     └── quick_explore_0026.py        # Non-destructive exploration
 ```
@@ -91,22 +90,12 @@ Each performance is stored as separate .smc files in both `/anno` and `/raw`.
 | Script | What it Processes | From Which Files | Amount Extracted | Output Size |
 |--------|------------------|------------------|------------------|-------------|
 | `quick_explore_0026.py` | All performances | Anno (metadata only) | Nothing | 0 MB |
-| `test_separated_extraction.py` | 1 performance | **BOTH anno + raw** | 2 cameras, 2 frames | ~50 MB |
-| `extract_0026_data.py` | 3 performances | Anno only | 4 cameras, 3 frames | ~300 MB |
-| `extract_0026_FULL.py` | 1 performance | **BOTH anno + raw** | 60 cameras, all frames | 10-50 GB |
+| `extract_0026_FULL.py` | 1 performance at a time | **BOTH anno + raw** | 60 cameras, all frames | 10-50 GB |
 | `extract_for_avatar_research.py` | Multiple performances | Both anno + raw | Strategic sampling | ~50-100 GB |
 
 ## File Overview
 
-### 1. `extract_0026_data.py`
-
-**What it processes:**
-- Extracts 3 performances by default: e0, s1_all, h0
-- Uses anno files only (does not read raw files)
-- Sample mode: 4 cameras × 3 frames per performance
-- Full mode (if enabled): 60 cameras × all frames (still anno only)
-
-### 2. `extract_0026_FULL.py` (UPDATED with Separation)
+### 1. `extract_0026_FULL.py` (Full Extraction with Separation)
 
 **What it processes when you run `python extract_0026_FULL.py --performance e0`:**
 
@@ -137,7 +126,7 @@ python extract_0026_FULL.py --performance e0 --combine
 python extract_0026_FULL.py --performance e0 --output /your/path
 ```
 
-### 3. `extract_for_avatar_research.py`
+### 2. `extract_for_avatar_research.py`
 
 **What it processes:**
 - Multiple performances optimized for avatar research
@@ -145,31 +134,12 @@ python extract_0026_FULL.py --performance e0 --output /your/path
 - Expression performances: Extracts FLAME parameters
 - Uses both anno and raw files strategically
 
-### 4. `quick_explore_0026.py`
+### 3. `quick_explore_0026.py`
 
 **What it processes:**
 - Reads metadata from all .smc files
 - Shows what data is available
 - Does NOT extract anything to disk
-
-### 5. `test_separated_extraction.py` (NEW)
-
-**What it processes:**
-- Small sample from one performance to demonstrate separation
-- Extracts 2 cameras × 2 frames only (~50MB)
-- Creates clear `from_anno/` and `from_raw/` folders
-- Generates summary showing what comes from each source
-
-**Usage:**
-```bash
-# Test with expression performance
-python test_separated_extraction.py e0
-
-# Test with speech performance  
-python test_separated_extraction.py s1_all
-```
-
-**Output:** `/ssd2/zhuoyuan/renderme360_temp/test_separated/[performance]/`
 
 ## Directory Structure Rationale
 
@@ -233,18 +203,7 @@ extracted_data/
 python quick_explore_0026.py
 ```
 
-### Step 2: Test Separation (5 minutes, ~50MB)
-```bash
-# Test separated extraction with minimal data
-python test_separated_extraction.py e0
-```
-
-### Step 3: Sample Extraction (10 minutes, ~300MB)
-```bash
-python extract_0026_data.py
-```
-
-### Step 4: Full Extraction with Separation (1-2 hours, 10-50GB)
+### Step 2: Full Extraction with Separation (1-2 hours, 10-50GB)
 ```bash
 # Expression performance (smaller, ~10-15GB)
 python extract_0026_FULL.py --performance e0
@@ -258,7 +217,7 @@ for p in e{0..11} s{1..6}_all h0; do
 done
 ```
 
-### Step 5: Research-Specific Extraction
+### Step 3: Research-Specific Extraction
 ```bash
 python extract_for_avatar_research.py
 ```
@@ -272,10 +231,6 @@ python extract_for_avatar_research.py
 | h0 | ❌ | ❌ | ❌ | ~5-10 GB |
 
 ## Storage Estimates
-
-### Sample Mode
-- 3 performances × 100MB = ~300MB total
-- 4 cameras × 3 frames each
 
 ### Full Single Performance
 - Expression (e0): ~10-15 GB
@@ -438,8 +393,7 @@ This extraction architecture bridges the gap between the low-level `renderme_360
 
 The multi-script approach provides flexibility:
 - **Exploration** without commitment (`quick_explore_0026.py`)
-- **Sampling** for understanding (`extract_0026_data.py` in sample mode)
-- **Full extraction** with safety (`extract_0026_FULL.py`)
+- **Full extraction** with separation (`extract_0026_FULL.py`)
 - **Research-specific** optimization (`extract_for_avatar_research.py`)
 
 This ensures you can work with the 500GB dataset efficiently, extracting only what you need, when you need it.
