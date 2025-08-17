@@ -1,0 +1,128 @@
+# RenderMe360 Project - Git Ignore File
+# Only track code and documentation, not data
+
+# ============================================
+# RAW DATA FILES (Never commit these!)
+# ============================================
+# SMC data files (can be gigabytes each)
+*.smc
+*.SMC
+
+# Anno and raw data directories
+test_download/anno/
+test_download/raw/
+
+# ============================================
+# EXTRACTED DATA (Generated, don't commit)
+# ============================================
+# Any extracted data folders
+extracted_data/
+FULL_EXTRACTION/
+UNIFIED_EXTRACTION/
+test_separated/
+sampled_overview/
+avatar_research_data/
+
+# Specific data types
+**/from_anno/
+**/from_raw/
+**/images/
+**/masks/
+**/audio/
+**/flame/
+**/keypoints*/
+**/uv_textures/
+**/scan/
+**/scan_masks/
+**/calibration/
+**/metadata/
+
+# ============================================
+# LARGE FILES
+# ============================================
+# Images and videos
+*.jpg
+*.jpeg
+*.png
+*.mp4
+*.avi
+*.mov
+*.mkv
+
+# Audio files
+*.mp3
+*.wav
+*.flac
+
+# 3D files
+*.ply
+*.obj
+*.fbx
+*.glb
+*.gltf
+
+# Numpy/tensor files (can be large)
+*.npy
+*.npz
+*.pt
+*.pth
+*.pkl
+*.pickle
+
+# Model weights
+*.ckpt
+*.safetensors
+*.bin
+
+# ============================================
+# PYTHON
+# ============================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# ============================================
+# JUPYTER
+# ============================================
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+# ============================================
+# OS FILES
+# ============================================
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# ============================================
+# IDE
+# ============================================
+.vscode/
+.idea/
+*.sublime-*
+
+# ============================================
+# EXCEPTIONS (Force include these)
+# ============================================
+# Keep README files
+!README.md
+!README_*.md
+
+# Keep extraction scripts
+!process_data/*.py
+
+# Keep configuration files
+!*.json
+!*.yaml
+!*.yml
+
+# But exclude large metadata
+metadata/*.json
+extracted_*/metadata/*.json
