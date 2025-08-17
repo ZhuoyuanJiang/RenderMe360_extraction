@@ -8,9 +8,12 @@
 *.smc
 *.SMC
 
-# Anno and raw data directories
-test_download/anno/
-test_download/raw/
+# Exclude data files but keep README in anno and raw
+test_download/anno/*.smc
+test_download/raw/**/*.smc
+!test_download/anno/README.md
+!test_download/raw/README.md
+!test_download/raw/*/README.md
 
 # ============================================
 # EXTRACTED DATA (Generated, don't commit)
