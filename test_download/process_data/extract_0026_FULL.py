@@ -36,6 +36,13 @@ def extract_full_performance(anno_file, raw_file, output_dir, separate_sources=T
     print(f"Separate sources: {separate_sources}")
     print(f"{'='*60}")
     
+    # Check if extraction is already complete
+    completion_marker = output_dir / '.extraction_complete'
+    if completion_marker.exists():
+        print(f"\n✓ Performance already fully extracted at {output_dir}")
+        print(f"  To re-extract, delete {completion_marker}")
+        return output_dir
+    
     output_dir.mkdir(parents=True, exist_ok=True)
     
     # Create separate output directories if requested
@@ -70,14 +77,30 @@ def extract_full_performance(anno_file, raw_file, output_dir, separate_sources=T
     metadata_dir = anno_output / 'metadata'
     metadata_dir.mkdir(exist_ok=True)
     
+    # Convert numpy types to Python native types for JSON serialization
+    def convert_numpy_types(obj):
+        """Recursively convert numpy types to native Python types"""
+        if isinstance(obj, np.integer):
+            return int(obj)
+        elif isinstance(obj, np.floating):
+            return float(obj)
+        elif isinstance(obj, np.ndarray):
+            return obj.tolist()
+        elif isinstance(obj, dict):
+            return {key: convert_numpy_types(val) for key, val in obj.items()}
+        elif isinstance(obj, list):
+            return [convert_numpy_types(item) for item in obj]
+        else:
+            return obj
+    
     metadata = {
         'subject_id': anno_reader.actor_id,
         'performance': anno_reader.performance_part,
-        'actor_info': actor_info,
-        'camera_info': camera_info,
+        'actor_info': convert_numpy_types(actor_info),
+        'camera_info': convert_numpy_types(camera_info),
         'capture_date': anno_reader.capture_date,
-        'total_frames': total_frames,
-        'total_cameras': total_cameras,
+        'total_frames': int(total_frames),
+        'total_cameras': int(total_cameras),
         'extraction_date': datetime.now().isoformat(),
         'extraction_mode': 'FULL',
         'data_source': 'anno'
@@ -118,19 +141,25 @@ def extract_full_performance(anno_file, raw_file, output_dir, separate_sources=T
     
     print(f"   ✓ Saved calibration for {total_cameras} cameras")
     
-    # 2. Extract audio (from anno, if speech performance)
+    # 2. Extract audio (from anno, if available)
+    # Note: Audio may not be present even in speech performances
     if 's' in anno_reader.performance_part:
-        print("\n2. Extracting audio from ANNO...")
+        print("\n2. Checking for audio in ANNO...")
         audio_dir = anno_output / 'audio'
-        audio_dir.mkdir(exist_ok=True)
         
-        audio_data = anno_reader.get_audio()
-        if audio_data:
-            sr = int(np.array(audio_data['sample_rate']))
-            audio_array = np.array(audio_data['audio'])
-            anno_reader.writemp3(str(audio_dir / 'audio.mp3'), sr, audio_array, normalized=True)
-            np.savez(audio_dir / 'audio_data.npz', audio=audio_array, sample_rate=sr)
-            print(f"   ✓ Audio: {audio_array.shape[0]/sr:.1f} seconds")
+        try:
+            audio_data = anno_reader.get_audio()
+            if audio_data:
+                audio_dir.mkdir(exist_ok=True)
+                sr = int(np.array(audio_data['sample_rate']))
+                audio_array = np.array(audio_data['audio'])
+                anno_reader.writemp3(str(audio_dir / 'audio.mp3'), sr, audio_array, normalized=True)
+                np.savez(audio_dir / 'audio_data.npz', audio=audio_array, sample_rate=sr)
+                print(f"   ✓ Audio: {audio_array.shape[0]/sr:.1f} seconds")
+        except (KeyError, Exception) as e:
+            print(f"   ⚠ No audio data found in annotation file")
+            # Don't create empty audio directory if no audio
+            pass
     
     # 3. Extract all images and masks (from raw if available, else from anno)
     if raw_reader:
@@ -143,21 +172,44 @@ def extract_full_performance(anno_file, raw_file, output_dir, separate_sources=T
             # Create camera-specific directories IN RAW OUTPUT
             img_dir = raw_output / 'images' / f'cam_{cam_str}'
             mask_dir = raw_output / 'masks' / f'cam_{cam_str}'
+            
+            # Check if this camera's data already exists
+            existing_images = len(list(img_dir.glob('frame_*.jpg'))) if img_dir.exists() else 0
+            existing_masks = len(list(mask_dir.glob('frame_*.png'))) if mask_dir.exists() else 0
+            
+            if existing_images >= total_frames and existing_masks >= total_frames:
+                # print(f"   Skipping cam_{cam_str} - already extracted")
+                continue
+            
             img_dir.mkdir(parents=True, exist_ok=True)
             mask_dir.mkdir(parents=True, exist_ok=True)
             
             for frame_id in range(total_frames):
+                # Skip if both files already exist
+                img_path = img_dir / f'frame_{frame_id:06d}.jpg'
+                mask_path = mask_dir / f'frame_{frame_id:06d}.png'
+                
+                if img_path.exists() and mask_path.exists():
+                    continue
+                    
                 try:
                     # Color image
-                    img = raw_reader.get_img(cam_str, 'color', frame_id)
-                    cv2.imwrite(str(img_dir / f'frame_{frame_id:06d}.jpg'), img, 
-                              [cv2.IMWRITE_JPEG_QUALITY, 95])
-                    
-                    # Mask
-                    mask = raw_reader.get_img(cam_str, 'mask', frame_id)
-                    cv2.imwrite(str(mask_dir / f'frame_{frame_id:06d}.png'), mask)
+                    if not img_path.exists():
+                        img = raw_reader.get_img(cam_str, 'color', frame_id)
+                        cv2.imwrite(str(img_path), img, [cv2.IMWRITE_JPEG_QUALITY, 95])
                 except Exception as e:
-                    print(f"\n   Error cam{cam_str} frame{frame_id}: {e}")
+                    if "Invalid Image_type" not in str(e):
+                        print(f"\n   Error cam{cam_str} frame{frame_id} (color): {e}")
+                
+                try:
+                    # Mask - may not be available for all performances
+                    if not mask_path.exists():
+                        mask = raw_reader.get_img(cam_str, 'mask', frame_id)
+                        cv2.imwrite(str(mask_path), mask)
+                except Exception as e:
+                    # Silently skip mask errors as they may not be available
+                    if "Invalid Image_type" not in str(e):
+                        print(f"\n   Error cam{cam_str} frame{frame_id} (mask): {e}")
     else:
         print("\n3. No raw file available, extracting sample images from ANNO (lower resolution)...")
         
@@ -303,6 +355,13 @@ def extract_full_performance(anno_file, raw_file, output_dir, separate_sources=T
         print(f"Output: {output_dir}")
         print(f"Total size: {total_size / (1024**3):.2f} GB")
         print(f"{'='*60}")
+    
+    # Mark extraction as complete
+    completion_marker = output_dir / '.extraction_complete'
+    with open(completion_marker, 'w') as f:
+        f.write(f"Extraction completed at {datetime.now().isoformat()}\n")
+        f.write(f"Performance: {anno_reader.performance_part}\n")
+        f.write(f"Total size: {total_size / (1024**3):.2f} GB\n")
     
     return output_dir
 
