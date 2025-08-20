@@ -278,18 +278,18 @@ FULL_EXTRACTION/
     │   ├── flame/             # FLAME params (e* only)
     │   ├── uv_textures/       # UV maps (e* only)
     │   ├── scan/              # 3D mesh (e* only)
-    │   ├── scan_masks/        # Scan masks (e* only)
-    │   └── audio/             # Audio (s* only)
+    │   └── scan_masks/        # Scan masks (e* only)
     │
     └── from_raw/              # Data from raw file
         ├── images/            # High-res images (2048×2448)
         │   ├── cam_00/
         │   │   └── frame_000000.jpg
         │   └── cam_59/
-        └── masks/             # High-res masks
-            ├── cam_00/
-            │   └── frame_000000.png
-            └── cam_59/
+        ├── masks/             # High-res masks
+        │   ├── cam_00/
+        │   │   └── frame_000000.png
+        │   └── cam_59/
+        └── audio/             # Audio (s* only)
 ```
 
 ### Combined Structure (Legacy, use --combine flag)

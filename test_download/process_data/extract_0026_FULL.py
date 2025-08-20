@@ -117,13 +117,14 @@ def extract_full_performance(anno_file, raw_file, output_dir, separate_sources=T
             f.write("from_anno/: Data from annotation file\n")
             f.write("  - Calibration matrices\n")
             f.write("  - Keypoints (2D and 3D)\n")
-            f.write("  - FLAME parameters\n")
-            f.write("  - UV textures\n")
-            f.write("  - Scan mesh\n")
-            f.write("  - Audio (if speech)\n\n")
+            f.write("  - FLAME parameters (expression performances only)\n")
+            f.write("  - UV textures (expression performances only)\n")
+            f.write("  - Scan mesh (expression performances only)\n")
+            f.write("  - Scan masks (expression performances only)\n\n")
             f.write("from_raw/: Data from raw file\n")
             f.write("  - High-resolution images\n")
             f.write("  - High-resolution masks\n")
+            f.write("  - Audio (speech performances only)\n")
     
     # 1. Extract calibration (from anno)
     print("\n1. Extracting calibration from ANNO...")
@@ -141,23 +142,23 @@ def extract_full_performance(anno_file, raw_file, output_dir, separate_sources=T
     
     print(f"   ✓ Saved calibration for {total_cameras} cameras")
     
-    # 2. Extract audio (from anno, if available)
-    # Note: Audio may not be present even in speech performances
-    if 's' in anno_reader.performance_part:
-        print("\n2. Checking for audio in ANNO...")
-        audio_dir = anno_output / 'audio'
+    # 2. Extract audio (from raw, if available)
+    # Note: Audio is stored in RAW files for speech performances, not anno files
+    if 's' in anno_reader.performance_part and raw_reader:
+        print("\n2. Extracting audio from RAW file...")
+        audio_dir = raw_output / 'audio'  # Put in raw_output since it comes from raw file
         
         try:
-            audio_data = anno_reader.get_audio()
+            audio_data = raw_reader.get_audio()  # Fixed: Use raw_reader instead of anno_reader
             if audio_data:
                 audio_dir.mkdir(exist_ok=True)
                 sr = int(np.array(audio_data['sample_rate']))
                 audio_array = np.array(audio_data['audio'])
-                anno_reader.writemp3(str(audio_dir / 'audio.mp3'), sr, audio_array, normalized=True)
+                raw_reader.writemp3(str(audio_dir / 'audio.mp3'), sr, audio_array, normalized=True)
                 np.savez(audio_dir / 'audio_data.npz', audio=audio_array, sample_rate=sr)
                 print(f"   ✓ Audio: {audio_array.shape[0]/sr:.1f} seconds")
         except (KeyError, Exception) as e:
-            print(f"   ⚠ No audio data found in annotation file")
+            print(f"   ⚠ No audio data found in raw file")
             # Don't create empty audio directory if no audio
             pass
     
@@ -308,10 +309,17 @@ def extract_full_performance(anno_file, raw_file, output_dir, separate_sources=T
             if scan:
                 scan_dir = anno_output / 'scan'
                 scan_dir.mkdir(exist_ok=True)
-                anno_reader.write_ply(scan, str(scan_dir / 'mesh.ply'))
-                print(f"   ✓ Scan: {scan['vertex'].shape[0]} vertices")
-        except:
-            pass
+                
+                # Check if plyfile is installed
+                try:
+                    import plyfile
+                    anno_reader.write_ply(scan, str(scan_dir / 'mesh.ply'))
+                    print(f"   ✓ Scan: {scan['vertex'].shape[0]} vertices")
+                except ImportError:
+                    print(f"   ⚠ plyfile not installed. Run: pip install plyfile")
+                    print(f"     Scan mesh data exists but cannot be saved without plyfile")
+        except Exception as e:
+            print(f"   ⚠ Could not extract scan mesh: {e}")
         
         # Scan masks (from anno)
         print("\n8. Extracting scan masks from ANNO...")
