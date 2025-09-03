@@ -153,15 +153,17 @@ def extract_full_performance(anno_file, raw_file, output_dir, separate_sources=T
             f.write("="*40 + "\n\n")
             f.write("from_anno/: Data from annotation file\n")
             f.write("  - Calibration matrices\n")
+            f.write("  - Metadata (actor info, camera info)\n")
             f.write("  - Keypoints (2D and 3D)\n")
+            f.write("  - Masks (segmentation masks for all frames)\n")
             f.write("  - FLAME parameters (expression performances only)\n")
             f.write("  - UV textures (expression performances only)\n")
             f.write("  - Scan mesh (expression performances only)\n")
             f.write("  - Scan masks (expression performances only)\n\n")
             f.write("from_raw/: Data from raw file\n")
             f.write("  - High-resolution images\n")
-            f.write("  - High-resolution masks\n")
             f.write("  - Audio (speech performances only)\n")
+            f.write("\nNote: Only folders with actual data will be created.\n")
     
     # 1. Extract calibration (from anno)
     print("\n1. Extracting calibration from ANNO...")
@@ -235,8 +237,9 @@ def extract_full_performance(anno_file, raw_file, output_dir, separate_sources=T
                 # print(f"   Skipping cam_{cam_str} - already extracted")
                 continue
             
-            img_dir.mkdir(parents=True, exist_ok=True)
-            mask_dir.mkdir(parents=True, exist_ok=True)
+            # Don't create directories yet - wait to see if we have data
+            img_created = False
+            mask_created = False
             
             for frame_id in range(total_frames):
                 # Skip if both files already exist
@@ -250,6 +253,9 @@ def extract_full_performance(anno_file, raw_file, output_dir, separate_sources=T
                     # Color image
                     if not img_path.exists():
                         img = raw_reader.get_img(cam_str, 'color', frame_id)
+                        if not img_created:
+                            img_dir.mkdir(parents=True, exist_ok=True)
+                            img_created = True
                         cv2.imwrite(str(img_path), img, [cv2.IMWRITE_JPEG_QUALITY, 95])
                 except Exception as e:
                     if "Invalid Image_type" not in str(e):
@@ -259,6 +265,9 @@ def extract_full_performance(anno_file, raw_file, output_dir, separate_sources=T
                     # Mask - may not be available for all performances
                     if not mask_path.exists():
                         mask = raw_reader.get_img(cam_str, 'mask', frame_id)
+                        if not mask_created:
+                            mask_dir.mkdir(parents=True, exist_ok=True)
+                            mask_created = True
                         cv2.imwrite(str(mask_path), mask)
                 except Exception as e:
                     # Silently skip mask errors as they may not be available
@@ -281,8 +290,9 @@ def extract_full_performance(anno_file, raw_file, output_dir, separate_sources=T
         if existing_images >= total_frames and existing_masks >= total_frames:
             continue
         
-        img_dir.mkdir(parents=True, exist_ok=True)
-        mask_dir.mkdir(parents=True, exist_ok=True)
+        # Don't create directories yet - wait to see if we have data
+        img_created = False
+        mask_created = False
         
         for frame_id in range(total_frames):
             # Skip if both files already exist
@@ -296,6 +306,9 @@ def extract_full_performance(anno_file, raw_file, output_dir, separate_sources=T
                 # Color image
                 if not img_path.exists():
                     img = anno_reader.get_img(cam_str, 'color', frame_id)
+                    if not img_created:
+                        img_dir.mkdir(parents=True, exist_ok=True)
+                        img_created = True
                     cv2.imwrite(str(img_path), img, [cv2.IMWRITE_JPEG_QUALITY, 85])
             except Exception as e:
                 if "Invalid Image_type" not in str(e):
@@ -305,6 +318,9 @@ def extract_full_performance(anno_file, raw_file, output_dir, separate_sources=T
                 # Mask - may not be available for all performances
                 if not mask_path.exists():
                     mask = anno_reader.get_img(cam_str, 'mask', frame_id)
+                    if not mask_created:
+                        mask_dir.mkdir(parents=True, exist_ok=True)
+                        mask_created = True
                     cv2.imwrite(str(mask_path), mask)
             except Exception as e:
                 # Silently skip mask errors as they may not be available
@@ -567,10 +583,22 @@ def main():
     print("="*60)
     
     if separate_sources:
-        print("\nOutput structure will be:")
+        print("\nExpected output structure:")
         print(f"  {output_dir}/")
         print(f"    ├── from_anno/   # Data from annotation file")
+        print(f"    │   ├── calibration/")
+        print(f"    │   ├── metadata/")
+        print(f"    │   ├── masks/       # Segmentation masks")
+        print(f"    │   ├── keypoints2d/ # (if available)")
+        print(f"    │   ├── keypoints3d/")
+        print(f"    │   ├── flame/       # (expressions only)")
+        print(f"    │   ├── uv_textures/ # (expressions only)")
+        print(f"    │   ├── scan/        # (expressions only)")
+        print(f"    │   └── scan_masks/  # (expressions only)")
         print(f"    └── from_raw/    # Data from raw file")
+        print(f"        ├── images/      # High-res RGB images")
+        print(f"        └── audio/       # (speech only)")
+        print("\nNote: Only folders with actual data will be created.")
     
     response = input("\nAre you sure you want to proceed? (yes/no): ")
     if response.lower() != 'yes':

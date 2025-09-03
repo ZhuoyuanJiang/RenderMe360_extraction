@@ -87,6 +87,85 @@ A performance is one recording session of a specific type. Subject 0026 has **19
 
 Each performance is stored as separate .smc files in both `/anno` and `/raw`.
 
+## Deep Dive: Understanding Masks vs Scan Masks
+
+One of the most confusing aspects of the RenderMe360 dataset is the difference between regular **masks** and **scan masks**. Here's a detailed explanation:
+
+### Regular Masks (`get_img(cam_id, 'mask', frame)`)
+- **Type:** Dynamic segmentation masks that change over time
+- **Quantity:** One mask per frame per camera
+- **Example:** For e0: 110 frames × 60 cameras = 6,600 mask files
+- **Purpose:** Frame-by-frame subject segmentation throughout the entire performance
+- **Usage:** Track the subject's silhouette as they move/express over time
+- **File Structure:** `masks/cam_XX/frame_XXXXXX.png`
+- **Resolution:** 2048×2448 (matching the RGB images)
+- **Data Nature:** Binary masks showing which pixels belong to the subject in each frame
+
+### Scan Masks (`get_scanmask(cam_id)`)
+- **Type:** Static reference masks for the 3D scan
+- **Quantity:** ONE mask per camera (60 total, regardless of frames)
+- **Example:** For e0: 60 scan mask files (one per camera)
+- **Purpose:** Shows visibility/segmentation of the 3D scan mesh from each camera's viewpoint
+- **Usage:** For projecting/rendering the 3D scan back to 2D camera views
+- **File Structure:** `scan_masks/cam_XX.png` (no frame number!)
+- **Resolution:** 2048×2448
+- **Data Nature:** Shows which pixels of the 3D scan are visible from each camera angle
+
+### The Relationship Visualized
+```
+3D Scan Mesh (1 file: mesh.ply with ~133k vertices)
+     ↓
+Projected to 60 camera views
+     ↓  
+60 Scan Masks (one per camera showing scan visibility)
+
+Meanwhile, separately:
+Performance video (110 frames × 60 cameras)
+     ↓
+6,600 Regular Masks (tracking subject through entire performance)
+```
+
+### Why Only One 3D Scan Instead of Per-Frame Scans?
+
+This is a critical design decision in RenderMe360, driven by practical and computational constraints:
+
+#### 1. **Capture Technology Limitations**
+- High-resolution 3D scanning (132,998 vertices) requires specialized equipment and significant capture time
+- The scan likely uses photogrammetry or structured light scanning which needs the subject to stay perfectly still
+- Capturing 110 high-res 3D scans would require the subject to freeze at each frame - impossible for natural motion
+
+#### 2. **Storage and Computational Costs**
+- One scan mesh: 17 MB
+- If per-frame for e0: 17 MB × 110 frames = 1.87 GB just for meshes
+- If per-frame for s1_all: 17 MB × 2,529 frames = 43 GB of mesh data alone!
+- Processing time would increase 100x-2500x
+
+#### 3. **Different Data Types for Different Purposes**
+- **3D Scan:** High-quality reference geometry for detailed face/body modeling (static)
+- **FLAME Parameters:** Lightweight per-frame 3D representation (only for expression performances)
+- **2D Masks + Multi-view:** Can reconstruct rough 3D using visual hull/MVS if needed
+
+#### 4. **The RenderMe360 Hybrid Approach**
+```
+Static High-Quality Geometry: 1 detailed 3D scan (reference)
+               +
+Dynamic Low-Dimensional Data: FLAME parameters per frame (expressions only)
+               +  
+Multi-View Coverage: 60 cameras × all frames (for reconstruction if needed)
+```
+
+#### 5. **What You Get Instead of Per-Frame Scans**
+- **For expression performances (e0-e11):** FLAME parameters provide per-frame 3D face shape/expression
+- **For all performances:** 60 synchronized camera views allow multi-view stereo reconstruction
+- **Single high-res scan:** Provides detailed reference geometry that FLAME can't capture
+
+### Key Insight
+- **Regular masks** = temporal data (changes every frame as subject moves)
+- **Scan masks** = spatial data (static projection of single 3D scan to each camera)
+- The scan is captured at ONE reference moment, while regular masks track the entire performance sequence
+
+This hybrid approach balances quality, storage, and practical capture constraints. If you need per-frame 3D, you would either use the FLAME parameters (for faces) or apply multi-view reconstruction algorithms to the 60 camera views.
+
 ## Script Comparison
 
 | Script | What it Processes | From Which Files | Amount Extracted | Output Size |
@@ -141,13 +220,47 @@ python extract_0026_FULL.py --performance e0 --output /your/path
 - May result in duplicate data in different folders (from_anno/ and from_raw/)
 - Guarantees nothing is missed but uses more storage and time (KEY MOTIVATION of why we wrote this file!!)
 
+**Important Discovery from Testing:**
+We tested `extract_0026_FULL_both.py` on e0 and s1_all performances and discovered it extracts **mask data from annotation files** that `extract_0026_FULL.py` completely misses:
+- **e0 performance:** Found 6,600 mask files in from_anno/masks/ (0.41 GB)
+- **s1_all performance:** Found 151,740 mask files in from_anno/masks/ (14.93 GB)
+- These are the ONLY masks in the dataset - raw files do NOT contain mask data
+- The regular extraction script incorrectly assumes masks would be in raw files and misses them entirely
+
 **When to use:**
 - When you suspect data might be missing from expected locations
 - For verification that the primary script extracted everything
 - When the dataset structure is unknown or has changed
 - If you want absolute certainty that all data is extracted
+- **If you need the additional masks from annotation files**
 
-**Note:** We developed this after discovering audio was in raw files instead of anno files. While the primary script has been fixed, this brute force version remains available for those who want complete assurance. 
+**Note:** We developed this after discovering audio was in raw files instead of anno files. While the primary script has been fixed, this brute force version remains available for those who want complete assurance.
+
+**Additional Notes (09/03/2025):** After testing `extract_0026_FULL_both.py` on e0 and s1_all performances, we discovered it successfully extracts additional mask data from annotation files that the regular script misses. This validates the purpose of having this brute-force alternative for comprehensive data extraction. 
+
+**Expected Output Structure:**
+```
+/output_directory/0026_[performance]/
+├── from_anno/              # Data from annotation file
+│   ├── calibration/        # Camera calibration matrices
+│   ├── metadata/           # Actor and camera info
+│   ├── masks/              # Segmentation masks (ALL masks are here)
+│   │   ├── cam_00/         # frame_000000.png to frame_XXXXXX.png
+│   │   └── cam_59/
+│   ├── keypoints2d/        # 2D facial landmarks (cameras 18-32)
+│   ├── keypoints3d/        # 3D facial landmarks
+│   ├── flame/              # FLAME parameters (expressions only)
+│   ├── uv_textures/        # UV texture maps (expressions only)
+│   ├── scan/               # 3D mesh scan (expressions only)
+│   └── scan_masks/         # Scan visibility masks (expressions only)
+└── from_raw/               # Data from raw file
+    ├── images/             # High-res RGB images (ALL images are here)
+    │   ├── cam_00/         # frame_000000.jpg to frame_XXXXXX.jpg
+    │   └── cam_59/
+    └── audio/              # Audio tracks (speech performances only)
+```
+
+**Note:** The modified script only creates folders when actual data exists, so you won't see empty directories.
 
 **Important:** This script has NOT been tested on the full dataset. We only used and tested `extract_0026_FULL.py` (via `extract_all_0026.sh`) for our extraction. The brute force version is provided as-is for users who want to verify nothing was missed, but they will need to test it themselves.
 
@@ -452,3 +565,32 @@ The multi-script approach provides flexibility:
 - **Research-specific** optimization (`extract_for_avatar_research.py`)
 
 This ensures you can work with the 500GB dataset efficiently, extracting only what you need, when you need it.
+
+## Additional Notes
+
+### Understanding Masks in Annotation Files (09/03/2025)
+
+During our testing of `extract_0026_FULL_both.py`, we discovered that annotation files contain mask data without corresponding RGB images. This initially seemed confusing - why have masks without images? Here's what we found:
+
+**The Reality of Data Storage:**
+- **Masks ONLY exist in annotation files**, NOT in raw files
+- **Images ONLY exist in raw files**, NOT in annotation files
+- Anno masks: ~72KB per file (grayscale PNG, 2448×2048 resolution)
+- Raw images: ~609KB per file (RGB JPEG, 2448×2048 resolution) 
+- Despite both having the same resolution, masks are stored separately from images
+
+**Why This Structure Exists:**
+The separation appears to be a dataset organization decision rather than a practical end-user feature:
+1. **Annotation workflow**: Different teams might have worked on masks separately from images
+2. **Quality control**: Masks could be verified independently during dataset creation
+3. **Storage optimization**: Anno files kept lightweight with only essential annotation data
+
+**Practical Reality:**
+- Masks alone without corresponding images have very limited use
+- Users need BOTH: images from raw files AND masks from anno files to work with the data
+- The masks in anno correspond to the same frames as images in raw (e.g., `frame_000000.png` mask matches `frame_000000.jpg` image)
+- The `extract_0026_FULL_both.py` script correctly extracts masks from anno files, while the regular script mistakenly looks for them in raw files and finds nothing
+- **Important:** The original extraction scripts would create empty folder structures even when no data existed (e.g., from_raw/masks/ folders with no files, from_anno/images/ folders with no files)
+- The modified version of `extract_0026_FULL_both.py` now only creates folders when there's actual data to store, preventing these confusing empty directories
+
+This design choice seems to reflect the internal annotation pipeline rather than end-user convenience. For practical use, you'll typically need both anno and raw files to get a complete, usable dataset.

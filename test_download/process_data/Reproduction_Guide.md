@@ -319,18 +319,27 @@ echo "yes" | python extract_0026_FULL.py --performance e0 --separate
 - This is the main extraction script used for all data in this guide
 - Efficiently extracts data from both anno and raw files
 - Has been thoroughly tested and verified
+- **Note:** We primarily used this script for our extractions
 
-**Brute Force Script (Optional):** `extract_0026_FULL_both.py`
+**Brute Force Script (Optional but More Comprehensive):** `extract_0026_FULL_both.py`
 - Alternative version that checks BOTH anno and raw files for EVERY data type
 - Ensures absolutely nothing is missed by extracting data from both sources when available
 - May result in duplicate data (e.g., images in both from_anno/ and from_raw/)
 - Use this if you want to guarantee complete extraction or verify nothing was missed
 - Usage: Same as extract_0026_FULL.py but may take longer and use more storage
+- **IMPORTANT FINDING:** Testing on e0 and s1_all performances revealed that this script extracts **mask data from annotation files** that extract_0026_FULL.py completely misses:
+  - For e0: Found 6,600 mask files in from_anno/masks/ (0.41 GB)
+  - For s1_all: Found 151,740 mask files in from_anno/masks/ (14.93 GB)
+  - Masks ONLY exist in annotation files; raw files contain only images
+  - The regular extraction script incorrectly looks for masks in raw files and finds nothing
+- Use this if you need complete data extraction including all masks
 
 ```bash
 # Example usage of the brute force version
 python extract_0026_FULL_both.py --performance e0 --separate
 ```
+
+**Note:** We left extract_0026_FULL_both.py for users who need more comprehensive data extraction. The regular extract_0026_FULL.py is sufficient for most use cases.
 - s2_all: 1,536 frames × 60 cameras = 92,160 images
 - etc.
 
