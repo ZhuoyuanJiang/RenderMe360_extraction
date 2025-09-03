@@ -69,6 +69,8 @@ renderme_360_reader.py (Base Library)
            ↓
     Our Extraction Layer
     ├── extract_0026_FULL.py         # Full extraction with separation
+    ├── extract_0026_FULL_both.py    # Brute force extraction (checks both files)
+    ├── extract_all_0026.sh          # Batch script for all 19 performances
     ├── extract_for_avatar_research.py # Research-optimized
     └── quick_explore_0026.py        # Non-destructive exploration
 ```
@@ -95,7 +97,7 @@ Each performance is stored as separate .smc files in both `/anno` and `/raw`.
 
 ## File Overview
 
-### 1. `extract_0026_FULL.py` (Full Extraction with Separation)
+### 1. `extract_0026_FULL.py` (Primary Script - Full Extraction with Separation)
 
 **What it processes when you run `python extract_0026_FULL.py --performance e0`:**
 
@@ -105,11 +107,11 @@ Each performance is stored as separate .smc files in both `/anno` and `/raw`.
    - UV textures
    - Scan mesh
    - Calibration matrices
-   - Audio (if speech)
 
 2. `/raw/0026/0026_e0_raw.smc` → Extracts to `from_raw/`:
    - High-resolution images (2048×2448)
    - High-resolution masks
+   - Audio (if speech performance)
 
 **Usage:**
 ```bash
@@ -124,9 +126,56 @@ python extract_0026_FULL.py --performance e0 --combine
 
 # Custom output location
 python extract_0026_FULL.py --performance e0 --output /your/path
+
+# Extract all 19 performances using batch script (recommended)
+./extract_all_0026.sh
 ```
 
-### 2. `extract_for_avatar_research.py`
+### 1b. `extract_0026_FULL_both.py` (Alternative - Brute Force Extraction)
+
+**Purpose:** Exhaustive extraction that checks BOTH anno and raw files for ALL data types
+
+**Differences from `extract_0026_FULL.py`:**
+- Checks both anno and raw files for every data type (not just their expected locations) - For example, `extract_0026_FULL.py` assumes audio is from /raw folder and ignores /anno folder when it finds audios in raw folder. P.S. audio is indeed in raw folder so extract_0026_FULL.py is good in our case. 
+- Extracts data from BOTH sources when available (e.g., images might exist in both raw and anno files. While `extract_0026_FULL.py` only looks at expected file type, `extract_0026_FULL_both.py` checks ALL file types - raw and anno)
+- May result in duplicate data in different folders (from_anno/ and from_raw/)
+- Guarantees nothing is missed but uses more storage and time (KEY MOTIVATION of why we wrote this file!!)
+
+**When to use:**
+- When you suspect data might be missing from expected locations
+- For verification that the primary script extracted everything
+- When the dataset structure is unknown or has changed
+- If you want absolute certainty that all data is extracted
+
+**Note:** We developed this after discovering audio was in raw files instead of anno files. While the primary script has been fixed, this brute force version remains available for those who want complete assurance. 
+
+**Important:** This script has NOT been tested on the full dataset. We only used and tested `extract_0026_FULL.py` (via `extract_all_0026.sh`) for our extraction. The brute force version is provided as-is for users who want to verify nothing was missed, but they will need to test it themselves.
+
+### 2. `extract_all_0026.sh` (Batch Extraction Script)
+
+**Purpose:** Automated batch extraction of all 19 performances for subject 0026 using `extract_0026_FULL.py`
+
+**Features:**
+- Uses `extract_0026_FULL.py` internally to process each performance
+- Automatically activates the RenderMe360_Data_Processing conda environment
+- Extracts all performances in sequence: e0-e11, s1_all-s6_all, h0
+- Shows progress tracking (X/19 performances completed)
+- Built-in resume capability - skips already extracted performances
+- Calculates and displays total extracted size at completion
+- Handles user confirmation automatically
+
+**Usage:**
+```bash
+# Make executable (first time only)
+chmod +x extract_all_0026.sh
+
+# Run the batch extraction
+./extract_all_0026.sh
+```
+
+This is the recommended way to extract the complete dataset as it handles all the details automatically.
+
+### 3. `extract_for_avatar_research.py`
 
 **What it processes:**
 - Multiple performances optimized for avatar research
@@ -211,7 +260,10 @@ python extract_0026_FULL.py --performance e0
 # Speech performance (larger, ~30-50GB)
 python extract_0026_FULL.py --performance s1_all
 
-# Extract all 19 performances (300-500GB)
+# Extract all 19 performances using the batch script (300-500GB)
+./extract_all_0026.sh
+
+# Alternative: Manual loop for all performances
 for p in e{0..11} s{1..6}_all h0; do
     python extract_0026_FULL.py --performance $p
 done
@@ -240,9 +292,9 @@ python extract_for_avatar_research.py
 ### Full Subject (All Performances)
 - 12 expressions + 4 speech + 1 head = **~300-500 GB**
 
-## For Your Research
+## For Our Research
 
-Based on your audio-driven 3D avatar project, you need:
+Based on audio-driven 3D avatar project, you might need:
 
 1. **Speech performances (s1-s4)** - Has synchronized audio
 2. **Expression performances (e0-e11)** - Has FLAME parameters
@@ -393,7 +445,10 @@ This extraction architecture bridges the gap between the low-level `renderme_360
 
 The multi-script approach provides flexibility:
 - **Exploration** without commitment (`quick_explore_0026.py`)
-- **Full extraction** with separation (`extract_0026_FULL.py`)
+- **Full extraction** 
+  - with separation (`extract_0026_FULL.py`) 
+  - without separation(combined) : (`extract_0026_FULL.py`) 
+  - Brute Force (not miss any file): (`extract_0026_FULL_both.py`) 
 - **Research-specific** optimization (`extract_for_avatar_research.py`)
 
 This ensures you can work with the 500GB dataset efficiently, extracting only what you need, when you need it.

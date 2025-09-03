@@ -182,7 +182,7 @@ The RenderMe360 dataset contains **multi-view video recordings**, not just stati
 - **Speech performances (s1_all-s6_all)**: Long videos (~1500-2500 frames, 50-85 seconds) of people speaking
 - **Head movement (h0)**: Head rotation sequences (~150 frames, 5 seconds)
 
-**Note:** Despite the name "speech", the s*_all files contain VIDEO data only. No audio tracks were found in the downloaded files.
+**Note:** Audio data IS included! Audio tracks are stored in the raw .smc files for speech performances (s1_all-s6_all), containing ~34-84 seconds of 48kHz stereo audio.
 
 After downloading and renaming the .smc files, here's how to extract all the data:
 
@@ -197,7 +197,7 @@ source ~/miniconda3/etc/profile.d/conda.sh
 conda activate RenderMe360_Data_Processing
 
 # Install all required dependencies
-pip install opencv-python numpy tqdm pydub ffmpeg-python matplotlib pillow scipy h5py
+pip install opencv-python numpy tqdm pydub ffmpeg-python matplotlib pillow scipy h5py plyfile
 pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
 ```
 
@@ -259,6 +259,11 @@ echo "yes" | python extract_0026_FULL.py --performance e0 --separate
 
 ✅ **Error Handling**: Gracefully handles missing mask data and other errors.
 
+✅ **Complete Data Extraction**: 
+- Expression performances: FLAME parameters, UV textures, 3D scan meshes (~130k vertices), scan masks
+- Speech performances: Audio tracks (48kHz stereo), full video sequences
+- All performances: High-res images (2048×2448), masks, 2D/3D keypoints, camera calibration
+
 ### **6.5 Expected Output Structure**
 
 ```
@@ -307,6 +312,25 @@ echo "yes" | python extract_0026_FULL.py --performance e0 --separate
 
 **⚠️ WARNING:** Speech performances are massive! Each contains:
 - s1_all: 2,529 frames × 60 cameras = 151,740 images
+
+### **6.7 Alternative Extraction Scripts**
+
+**Primary Script (Recommended):** `extract_0026_FULL.py`
+- This is the main extraction script used for all data in this guide
+- Efficiently extracts data from both anno and raw files
+- Has been thoroughly tested and verified
+
+**Brute Force Script (Optional):** `extract_0026_FULL_both.py`
+- Alternative version that checks BOTH anno and raw files for EVERY data type
+- Ensures absolutely nothing is missed by extracting data from both sources when available
+- May result in duplicate data (e.g., images in both from_anno/ and from_raw/)
+- Use this if you want to guarantee complete extraction or verify nothing was missed
+- Usage: Same as extract_0026_FULL.py but may take longer and use more storage
+
+```bash
+# Example usage of the brute force version
+python extract_0026_FULL_both.py --performance e0 --separate
+```
 - s2_all: 1,536 frames × 60 cameras = 92,160 images
 - etc.
 
