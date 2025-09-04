@@ -1,0 +1,67 @@
+# Test configuration for comparing 0018 extraction
+# This configuration is specifically for testing the fixed extraction script
+
+# Google Drive Configuration
+google_drive:
+  root_folder_id: "1vBmxhazI6atQEcCfi4wstoiAyFyK0-Ig"
+  remote_name: "vllab13"
+  
+# Extraction Configuration
+extraction:
+  subjects:
+    - "0018"  # Test subject
+    
+  # Extract all performances for complete comparison
+  performances:
+    - "s1_all"
+    - "s2_all"
+    - "s3_all"
+    - "s4_all"
+    - "s5_all"
+    - "s6_all"
+    
+  # Extract all available cameras
+  cameras: "all"
+  
+  # Extract all modalities to ensure completeness
+  modalities:
+    - "metadata"
+    - "calibration"
+    - "images"
+    - "masks"
+    - "audio"
+    - "keypoints2d"
+    - "keypoints3d"
+  
+# Storage Configuration  
+storage:
+  # Use same temp directory
+  temp_dir: "/ssd2/zhuoyuan/renderme360_temp/temp_smc/"
+  
+  # Output to 0018_temp for comparison
+  output_dir: "/ssd2/zhuoyuan/renderme360_temp/download_all/subjects/0018_temp/"
+  
+  # Use different manifest for test
+  manifest_path: "/ssd2/zhuoyuan/renderme360_temp/download_all/MANIFEST_test.csv"
+  
+  # Separate log directory
+  log_dir: "/ssd2/zhuoyuan/renderme360_temp/download_all/logs/"
+  
+# Processing Configuration
+processing:
+  delete_smc_after_extraction: true
+  verify_extraction: true
+  force_reextract: true  # Force extraction even if marker exists
+  max_retries: 3
+  retry_delay: 30
+  
+# Safety Limits
+limits:
+  max_temp_size_gb: 100
+  min_free_space_gb: 50
+  
+# Logging Configuration
+logging:
+  level: "INFO"
+  console_output: true
+  max_file_size_mb: 100

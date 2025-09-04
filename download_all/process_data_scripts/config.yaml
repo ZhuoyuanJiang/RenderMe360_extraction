@@ -1,0 +1,110 @@
+# RenderMe360 Streaming Extraction Configuration
+# This configuration file controls the extraction pipeline for downloading
+# and processing RenderMe360 data from Google Drive
+
+# Google Drive Configuration
+google_drive:
+  # The root folder ID containing all 500 subject folders
+  root_folder_id: "1vBmxhazI6atQEcCfi4wstoiAyFyK0-Ig"  # RenderMe360 Google Drive folder
+  
+  # Rclone remote configuration name (already configured as vllab13)
+  remote_name: "vllab13"
+  
+# Extraction Configuration
+extraction:
+  # List of subjects to process
+  # Start with one subject for testing, then expand to full list
+  subjects:
+    - "0018"  # First test subject
+    # Add more subjects after camera selection:
+    # - "0019"
+    # - "0020"
+    # - "0026"
+    # ... up to 500 subjects
+    
+  # Performances to extract (only speech performances for audio-driven avatar research)
+  performances:
+    - "s1_all"
+    - "s2_all"
+    - "s3_all"
+    - "s4_all"
+    - "s5_all"
+    - "s6_all"
+    
+  # Camera selection
+  # Use "all" to extract all 60 cameras (for initial test)
+  # After visualization, specify subset like: [0, 6, 12, 18, 24, 30, 36, 42, 48, 54]
+  cameras: "all"
+  
+  # Data modalities to extract
+  modalities:
+    - "metadata"      # Actor info, camera info
+    - "calibration"   # Camera calibration matrices
+    - "images"        # RGB images from all/selected cameras
+    - "masks"         # Segmentation masks (if available)
+    - "audio"         # Audio track for speech performances
+    - "keypoints2d"   # 2D facial landmarks (cameras 18-32)
+    - "keypoints3d"   # 3D facial landmarks
+    # Expression-specific (won't be in speech but checked anyway):
+    # - "flame"       # FLAME face model parameters
+    # - "uv_textures" # UV texture maps
+    # - "scan"        # 3D scan mesh
+    # - "scan_masks"  # Scan visibility masks
+  
+# Storage Configuration
+storage:
+  # Temporary directory for downloaded SMC files
+  temp_dir: "/ssd2/zhuoyuan/renderme360_temp/temp_smc/"
+  
+  # Output directory for extracted data
+  output_dir: "/ssd2/zhuoyuan/renderme360_temp/download_all/subjects/"
+  
+  # Path to manifest CSV for tracking progress
+  manifest_path: "/ssd2/zhuoyuan/renderme360_temp/download_all/MANIFEST.csv"
+  
+  # Directory for log files
+  log_dir: "/ssd2/zhuoyuan/renderme360_temp/download_all/logs/"
+  
+# Processing Configuration
+processing:
+  # Whether to delete SMC files after successful extraction
+  delete_smc_after_extraction: true
+  
+  # Whether to verify extraction completeness
+  verify_extraction: true
+  
+  # Force re-extraction even if already completed
+  force_reextract: false
+  
+  # Number of retry attempts for failed downloads
+  max_retries: 3
+  
+  # Delay between retry attempts (seconds)
+  retry_delay: 30
+  
+# Safety Limits
+limits:
+  # Maximum size for temp directory (GB)
+  max_temp_size_gb: 100
+  
+  # Minimum free space required to continue (GB)
+  min_free_space_gb: 50
+  
+# Logging Configuration
+logging:
+  # Log level (DEBUG, INFO, WARNING, ERROR)
+  level: "INFO"
+  
+  # Whether to also log to console
+  console_output: true
+  
+  # Maximum log file size (MB)
+  max_file_size_mb: 100
+  
+# Notes:
+# 1. Update root_folder_id with the actual Google Drive folder ID
+# 2. Start with subject "0018" to test the pipeline
+# 3. After visualizing all 60 cameras, update 'cameras' with selected subset
+# 4. Expand 'subjects' list to process more subjects
+# 5. Each subject is expected to be 10-15GB when extracted
+# 6. The pipeline will process one subject completely before moving to the next
