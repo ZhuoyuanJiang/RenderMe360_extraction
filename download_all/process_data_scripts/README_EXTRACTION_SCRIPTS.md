@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a streaming extraction pipeline for downloading and processing the RenderMe360 dataset from Google Drive. Unlike the previous approach that required separate annotation and raw files, this pipeline handles the new unified format where each performance is stored as a single raw SMC file on Google Drive.
+This is a streaming extraction pipeline for downloading and processing the RenderMe360 dataset from Google Drive. Unlike the previous approach that required separate annotation and raw files(see `../../test_download/process_data`), this pipeline handles the new unified format where each performance is stored as a single raw SMC file on Google Drive.
 
 **Key Features:**
 - **Streaming Processing**: Downloads and processes one subject at a time to manage storage
@@ -10,7 +10,7 @@ This is a streaming extraction pipeline for downloading and processing the Rende
 - **Configurable Cameras**: Support for extracting all 60 cameras or a subset
 - **Resume Capability**: Tracks progress in MANIFEST.csv for failure recovery
 - **Google Drive Integration**: Uses rclone to handle quotas and retries
-- **Optimized Storage**: Each subject only requires 10-15GB (vs 590GB in old format)
+- **Optimized Storage**: Each subject only requires 10-15GB (vs 590GB in old format `RenderMe-360_release_data_20id_full`)
 - **No Compression**: Saves raw image data without compression for maximum quality
 
 ## Prerequisites
@@ -33,7 +33,7 @@ conda activate RenderMe360_Streaming
 ### 2. Rclone Configuration
 Ensure rclone is configured with access to Google Drive:
 ```bash
-# Check if vllab13 remote exists
+# Check if vllab13 remote exists (TODO: switch vllab13 to more generic name later for readers)
 rclone listremotes | grep vllab13
 
 # Test access (replace with actual folder ID)
@@ -43,7 +43,7 @@ rclone ls vllab13: --drive-root-folder-id YOUR_FOLDER_ID --max-depth 1
 ### 3. Storage Requirements
 - **Temporary space**: ~50GB for downloaded SMC files
 - **Output space**: ~10-15GB per subject
-- **Total for 500 subjects**: ~5-7.5TB (process in batches if needed)
+- **Total for 500 subjects**: ~1.5-8.5TB depending on how you extract the data(process in batches if needed)
 
 ## Configuration
 
@@ -71,7 +71,7 @@ Extract subject 0018 with all 60 cameras:
 conda activate RenderMe360_Streaming
 
 # Run extraction for first subject
-python extract_streaming_gdrive.py --config config.yaml
+python extract_streaming_gdrive.py --config config.yaml # put only one subject in your config.yaml for now
 
 # Or process single performance for testing
 python extract_streaming_gdrive.py --subject 0018 --performance s1_all
@@ -280,7 +280,7 @@ The pipeline automatically resumes from where it left off:
 # Check what's completed
 grep completed /ssd2/zhuoyuan/renderme360_temp/download_all/MANIFEST.csv
 
-# Re-run extraction (skips completed performances)
+# Re-run extraction (automatically skips completed performances)
 python extract_streaming_gdrive.py
 
 # Force re-extraction of specific performance
@@ -303,7 +303,7 @@ ls -lh /ssd2/zhuoyuan/renderme360_temp/temp_smc/
 
 ## Differences from Old Pipeline
 
-### Old System (`extract_0026_FULL.py`)
+### Old System (`test_download/process_data/extract_0026_FULL.py`)
 - Required separate anno and raw SMC files
 - Extracted from two sources (from_anno/ and from_raw/)
 - Full extraction was 590GB per subject
