@@ -13,13 +13,14 @@ google_drive:
 # Extraction Configuration
 extraction:
   # List of subjects to process
-  # Start with one subject for testing, then expand to full list
+  # Testing camera patterns across multiple subjects
+  # NOTE: Processing 0026 before 0020-0025 for comparison with old extraction tests
   subjects:
-    - "0018"  # First test subject
-    # Add more subjects after camera selection:
-    # - "0019"
+    - "0019"  # Second test subject (sequential after 0018)
+    - "0026"  # Third test subject (NON-SEQUENTIAL - chosen to match old extraction tests)
+    # Already extracted: "0018" (will be skipped automatically)
+    # After camera pattern analysis, continue with:
     # - "0020"
-    # - "0026"
     # ... up to 500 subjects
     
   # Performances to extract (only speech performances for audio-driven avatar research)
