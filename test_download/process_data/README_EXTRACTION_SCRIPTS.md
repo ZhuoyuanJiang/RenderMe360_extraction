@@ -181,6 +181,7 @@ This hybrid approach balances quality, storage, and practical capture constraint
 **What it processes when you run `python extract_0026_FULL.py --performance e0`:**
 
 1. `/anno/0026_e0_anno.smc` → Extracts to `from_anno/`:
+   - Segmentation masks (THIS IS WHERE ALL MASKS ARE!)
    - FLAME parameters
    - 2D/3D keypoints
    - UV textures
@@ -189,8 +190,9 @@ This hybrid approach balances quality, storage, and practical capture constraint
 
 2. `/raw/0026/0026_e0_raw.smc` → Extracts to `from_raw/`:
    - High-resolution images (2048×2448)
-   - High-resolution masks
    - Audio (if speech performance)
+   
+**Note:** extract_0026_FULL.py incorrectly looks for masks in raw files and will miss them!
 
 **Usage:**
 ```bash
@@ -226,6 +228,7 @@ We tested `extract_0026_FULL_both.py` on e0 and s1_all performances and discover
 - **s1_all performance:** Found 151,740 mask files in from_anno/masks/ (14.93 GB)
 - These are the ONLY masks in the dataset - raw files do NOT contain mask data
 - The regular extraction script incorrectly assumes masks would be in raw files and misses them entirely
+- **Note:** The script may create an empty `from_raw/masks/` folder structure when checking for masks in raw files, but this folder will remain empty since raw files don't contain masks
 
 **When to use:**
 - When you suspect data might be missing from expected locations
@@ -438,6 +441,10 @@ FULL_EXTRACTION/
     ├── from_anno/             # Data from annotation file
     │   ├── metadata/          # Actor/camera info
     │   ├── calibration/       # Camera matrices
+    │   ├── masks/             # Segmentation masks (ALL masks are HERE!)
+    │   │   ├── cam_00/
+    │   │   │   └── frame_000000.png
+    │   │   └── cam_59/
     │   ├── keypoints2d/       # 2D landmarks (cam 18-32)
     │   ├── keypoints3d/       # 3D landmarks
     │   ├── flame/             # FLAME params (e* only)
@@ -449,10 +456,6 @@ FULL_EXTRACTION/
         ├── images/            # High-res images (2048×2448)
         │   ├── cam_00/
         │   │   └── frame_000000.jpg
-        │   └── cam_59/
-        ├── masks/             # High-res masks
-        │   ├── cam_00/
-        │   │   └── frame_000000.png
         │   └── cam_59/
         └── audio/             # Audio (s* only)
 ```

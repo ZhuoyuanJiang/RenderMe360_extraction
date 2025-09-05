@@ -21,10 +21,22 @@ test_download/raw/**/*.smc
 # Any extracted data folders
 extracted_data/
 FULL_EXTRACTION/
+FULL_EXTRACTION_BOTH/
 UNIFIED_EXTRACTION/
 test_separated/
 sampled_overview/
 avatar_research_data/
+
+# Download pipeline data (but keep reports and manifests)
+download_all/subjects/*/s*_all/
+download_all/subjects/0018_temp/
+download_all/temp_smc/
+download_all/logs/*.log
+
+# Keep subject reports and manifest files
+!download_all/subjects/*.md
+!download_all/subjects/*/*.md
+!download_all/MANIFEST*.csv
 
 # Specific data types
 **/from_anno/
