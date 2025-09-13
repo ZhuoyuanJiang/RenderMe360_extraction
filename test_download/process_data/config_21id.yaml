@@ -1,0 +1,196 @@
+# RenderMe360 21ID Dataset Extraction Configuration
+# This configuration controls extraction of the 21ID dataset version
+# which has a different Google Drive structure than the 500ID version
+
+# Google Drive Configuration
+google_drive:
+  # The root folder ID for the 21ID dataset
+  # You need to provide the actual folder ID from your Google Drive link
+  root_folder_id: "1tNu_Ge0u4IL4auqFP7VBtDxVSUwtqEF_"  # 21ID dataset root folder
+  
+  # Rclone remote configuration name (already configured)
+  remote_name: "vllab13"
+  
+  # Structure type for 21ID dataset (different from 500ID)
+  structure: "separate_anno_raw"  # 21ID has anno/ and raw/ folders at root
+  
+# Extraction Configuration
+extraction:
+  # List of subjects to process (21ID dataset subjects)
+  # Start with one subject for testing, then expand
+  subjects:
+    - "0026"  # Test subject that matches previous extraction tests
+    # Add more subjects as needed:
+    # - "0041"
+    # - "0042"
+    # ... up to 21 subjects total
+    
+  # Performances to extract
+  # Testing with s1_all and e0 first
+  performances:
+    - "s1_all"  # Speech performance 1
+    # - "s2_all"  # Speech performance 2
+    # - "s3_all"  # Speech performance 3
+    # - "s4_all"  # Speech performance 4
+    # - "s5_all"  # Speech performance 5
+    # - "s6_all"  # Speech performance 6
+    - "e0"      # Expression performance 0
+    # - "e1"      # Expression performance 1
+    # - "e2"      # Expression performance 2
+    # - "e3"      # Expression performance 3
+    # - "e4"      # Expression performance 4
+    # - "e5"      # Expression performance 5
+    # - "e6"      # Expression performance 6
+    # - "e7"      # Expression performance 7
+    # - "e8"      # Expression performance 8
+    # - "e9"      # Expression performance 9
+    # - "e10"     # Expression performance 10
+    # - "e11"     # Expression performance 11
+    # - "h0"      # Head rotation
+    
+  # Camera selection
+  # Options:
+  # - "all": Extract all 60 cameras
+  # - List of camera IDs: [0, 6, 12, 18, 24, 30, 36, 42, 48, 54]
+  # - Based on 500ID analysis, common pattern for speech performances:
+  #   - s1, s2, s4, s5, s6: Only camera 25 has data
+  #   - s3_all: 38 cameras have data
+  cameras: "all"  # Start with all, then optimize based on actual data
+  
+  # Data modalities to extract
+  # Select which types of data to extract
+  modalities:
+    - "metadata"      # Actor info, camera info, capture metadata
+    - "calibration"   # Camera calibration matrices
+    - "images"        # RGB images from cameras
+    - "masks"         # Segmentation masks
+    - "audio"         # Audio track (speech performances only)
+    - "keypoints2d"   # 2D facial landmarks (cameras 18-32)
+    - "keypoints3d"   # 3D facial landmarks
+    # Expression-specific modalities (only for 'e' performances):
+    - "flame"         # FLAME face model parameters
+    - "uv_textures"   # UV texture maps
+    - "scan"          # 3D scan mesh
+    - "scan_masks"    # Scan visibility masks
+  
+  # Whether to separate anno and raw data in output
+  separate_sources: true  # Creates from_anno/ and from_raw/ folders
+  
+# Storage Configuration
+storage:
+  # Temporary directory for downloaded SMC bundles
+  # Make sure this has enough space for temporary files (50-100GB)
+  temp_dir: "/ssd2/zhuoyuan/renderme360_temp/temp_smc/"
+  
+  # Output directory for extracted data
+  # This will contain subject folders with extracted performances
+  output_dir: "/ssd2/zhuoyuan/renderme360_temp/test_download/subjects/"
+  
+  # Path to manifest CSV for tracking extraction progress
+  manifest_path: "/ssd2/zhuoyuan/renderme360_temp/test_download/MANIFEST_21ID.csv"
+  
+  # Directory for log files
+  log_dir: "/ssd2/zhuoyuan/renderme360_temp/test_download/logs/"
+  
+# Processing Configuration
+processing:
+  # Whether to delete SMC files after successful extraction
+  # Set to true to save space during streaming extraction
+  delete_smc_after_extraction: true
+  
+  # Whether to verify extraction completeness
+  verify_extraction: true
+  
+  # Force re-extraction even if already completed
+  # Set to true to overwrite existing extractions
+  force_reextract: false
+  
+  # Number of retry attempts for failed downloads
+  max_retries: 3
+  
+  # Delay between retry attempts (seconds)
+  retry_delay: 30
+  
+# Safety Limits
+limits:
+  # Maximum size for temp directory (GB)
+  # Prevents filling up disk with temporary files
+  max_temp_size_gb: 200
+  
+  # Minimum free space required to continue (GB)
+  # Stops extraction if disk space is too low
+  min_free_space_gb: 100
+  
+# Selective Extraction Examples (uncomment to use)
+# 
+# Example 1: Extract only specific cameras for faster processing
+# extraction:
+#   cameras: [0, 12, 24, 36, 48]  # 5 cameras evenly distributed
+#
+# Example 2: Extract only images without masks
+# extraction:
+#   modalities:
+#     - "metadata"
+#     - "calibration"
+#     - "images"
+#     - "audio"
+#
+# Example 3: Extract single performance for testing
+# extraction:
+#   performances:
+#     - "s1_all"
+#
+# Example 4: Process multiple subjects in sequence
+# extraction:
+#   subjects:
+#     - "0026"
+#     - "0041"
+#     - "0042"
+
+# Notes:
+# 1. IMPORTANT: Update root_folder_id with your actual Google Drive folder ID
+#    - Get this from the Google Drive link URL
+#    - Format: https://drive.google.com/drive/folders/[FOLDER_ID]
+#
+# 2. Make sure rclone is configured with the remote name "vllab13"
+#    - Run: rclone config
+#    - Check existing remotes: rclone listremotes
+#
+# 3. Expected Google Drive structure for 21ID:
+#    RenderMe-360_release/
+#    ├── anno/
+#    │   ├── 0026/
+#    │   │   ├── 0026_e0_anno.smc/
+#    │   │   ├── 0026_s1_all_anno.smc/
+#    │   │   └── ...
+#    │   └── [other subjects]/
+#    └── raw/
+#        ├── 0026/
+#        │   ├── 0026_e0_raw.smc/
+#        │   ├── 0026_s1_all_raw.smc/
+#        │   └── ...
+#        └── [other subjects]/
+#
+# 4. Output structure will be:
+#    subjects/
+#    └── 0026/
+#        └── s1_all/
+#            ├── from_anno/
+#            │   ├── metadata/
+#            │   ├── calibration/
+#            │   ├── masks/
+#            │   ├── keypoints2d/
+#            │   └── keypoints3d/
+#            ├── from_raw/
+#            │   ├── images/
+#            │   └── audio/
+#            └── .extraction_complete
+#
+# 5. Start with a single subject and performance to test
+#    Then expand to process all 21 subjects
+#
+# 6. Monitor disk space during extraction
+#    Each subject can be 100-500GB when fully extracted
+#
+# 7. The MANIFEST_21ID.csv will track all extractions
+#    Check this file to see progress and any errors
