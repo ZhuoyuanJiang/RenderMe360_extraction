@@ -780,17 +780,27 @@ class RenderMe360ExtractorFull:
         for performance in performances:
             try:
                 self.logger.info(f"\n--- Performance: {performance} ---")
-                
+
+                # Check if already extracted BEFORE downloading
+                output_dir = Path(self.config['storage']['output_dir']) / subject_id / performance
+                completion_marker = output_dir / '.extraction_complete'
+
+                if completion_marker.exists() and not self.config.get('processing', {}).get('force_reextract', False):
+                    self.logger.info(f"✓ Performance already fully extracted at {output_dir}")
+                    self.logger.info(f"  Skipping download and extraction for {performance}")
+                    success_count += 1
+                    continue
+
                 # Download both anno and raw bundles
                 anno_path, raw_path = self.download_smc_bundle(subject_id, performance, 'both')
-                
+
                 if not anno_path and not raw_path:
                     self.logger.error(f"Failed to download any files for {subject_id}/{performance}")
                     self.stats['performances_failed'] += 1
                     self.update_manifest(subject_id, performance, 'download_failed',
                                        error="No files downloaded")
                     continue
-                
+
                 # Extract data
                 output_dir = self.extract_full_performance(
                     anno_path, raw_path, subject_id, performance

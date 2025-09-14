@@ -1,6 +1,12 @@
 #!/usr/bin/env python3
 """
-FULL EXTRACTION Script for RenderMe360 Subject 0026 - SMART VERSION
+[LEGACY] FULL EXTRACTION Script for RenderMe360 Subject 0026 - SMART VERSION
+
+Status: Working but superseded by extract_subject_FULL_both.py
+Use Case: Quick local testing when SMC files are pre-downloaded
+Requires: SMC files in /ssd2/zhuoyuan/renderme360_temp/test_download/[anno|raw]/
+Note: Hardcoded for subject 0026 only. For flexible extraction, use extract_subject_FULL_both.py
+
 This version checks both anno and raw files for all data types to ensure nothing is missed.
 WARNING: This will extract EVERYTHING and require 200-500GB of storage!
 """

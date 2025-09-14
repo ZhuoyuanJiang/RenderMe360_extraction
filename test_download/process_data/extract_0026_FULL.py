@@ -1,7 +1,13 @@
 #!/usr/bin/env python3
 """
-FULL EXTRACTION Script for RenderMe360 Subject 0026
-WARNING: This will extract EVERYTHING and require 200-500GB of storage!
+[LEGACY - INCOMPLETE] FULL EXTRACTION Script for RenderMe360 Subject 0026
+
+Status: Does not extract masks - produces incomplete extraction
+Issue: Missing mask extraction logic results in incomplete dataset
+Recommendation: Use extract_0026_FULL_both.py or extract_subject_FULL_both.py instead
+Note: Kept for historical reference only
+
+WARNING: This will extract EVERYTHING EXCEPT masks and require 200-500GB of storage!
 """
 
 import os

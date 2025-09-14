@@ -205,6 +205,31 @@ The pipeline creates `MANIFEST_21ID.csv` to track extraction progress:
 | timestamp | Extraction timestamp |
 | error | Error message if failed |
 
+## Monitoring Extraction Progress
+
+### Real-time Download Monitoring
+```bash
+# Watch download progress (file size growing)
+watch -n 2 'ls -lah /ssd2/zhuoyuan/renderme360_temp/temp_smc/*.smc 2>/dev/null | awk "{print \$5, \$9}"'
+```
+
+This command shows:
+- Current file size (updates every 2 seconds)
+- File name being downloaded
+- Press `Ctrl+C` to exit
+
+Expected file sizes:
+- **s1_all**: ~14GB (anno) + ~59GB (raw) = 73GB total
+- **s2_all to s6_all**: Similar to s1_all
+- **e0 to e11**: ~700MB (anno) + ~2.5GB (raw) = 3.2GB each
+- **h0**: ~500MB (anno) + ~2.7GB (raw) = 3.2GB total
+
+### Check Extraction Log
+```bash
+# Follow the latest log file
+tail -f /ssd2/zhuoyuan/renderme360_temp/test_download/logs/extraction_*.log
+```
+
 ## Troubleshooting
 
 ### Google Drive Authentication Issues

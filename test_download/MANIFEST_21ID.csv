@@ -1,0 +1,5 @@
+subject,performance,status,cameras_extracted,frames,size_gb,anno_size_gb,raw_size_gb,timestamp,error,cameras
+26,s1_all,completed,,2529.0,101.68759668525308,14.934333842247725,86.75326284300536,2025-09-13T09:12:42.877574,,60.0
+26,e0,download_failed,,,,,,2025-09-13T09:16:48.979148,No files downloaded,
+26,e0,download_failed,,,,,,2025-09-13T10:14:36.335437,No files downloaded,
+0026,e0,download_failed,,,,,,2025-09-13T15:37:04.331462,No files downloaded,
