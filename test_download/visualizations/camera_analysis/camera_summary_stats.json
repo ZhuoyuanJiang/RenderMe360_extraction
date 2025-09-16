@@ -1,0 +1,37 @@
+{
+  "total_cameras": 60,
+  "yaw_range": [
+    -170.7497772053192,
+    171.2099302643078
+  ],
+  "height_range": [
+    -1.1612192589181307,
+    0.05944638898067711
+  ],
+  "distance_stats": {
+    "mean": 1.3470763266593808,
+    "std": 0.1761142749272322,
+    "min": 1.118791782567133,
+    "max": 1.618223967825521
+  },
+  "height_distribution": {
+    "U": 21,
+    "M": 19,
+    "L": 20
+  },
+  "fov_distribution": {
+    "Small": 60,
+    "Large": 0
+  },
+  "hemisphere_distribution": {
+    "front": 31,
+    "rear": 29
+  },
+  "angular_gaps": {
+    "mean": 6.0,
+    "std": 8.340027372715507,
+    "min": 0.009466938089616406,
+    "max": 19.99624564014465
+  },
+  "front_coverage_percentage": 51.66666666666667
+}
