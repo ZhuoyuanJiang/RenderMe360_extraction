@@ -398,4 +398,226 @@ This might be specific to:
 **TODO**: Cross-validate with other subjects/performances to confirm if this is universal.
 
 
-# Phase 2: 
+# Phase 2: Camera Selection Implementation
+
+## Overview
+Phase 2 implements research-driven camera selection based on Phase 1 findings, with a critical orientation correction discovered during implementation.
+
+## Critical Discovery: Coordinate System Orientation
+
+### The Problem
+Initial implementation made incorrect assumption about camera coordinate system:
+- **WRONG assumption**: 0° = front (face), ±180° = rear (back of head)
+- **CORRECT orientation**: ±180° = front (face), 0° = rear (back of head)
+
+This caused our initial "optimal" selection to primarily show the back of the subject's head!
+
+### How We Discovered It
+- User observation: Only cameras 26 and 29 showed the front of the subject
+- These cameras were at ~±170°, which we had labeled as "rear"
+- This revealed the coordinate system was inverted from our assumption
+
+## File Descriptions
+
+### 1. `select_cameras_phase2.py` - Camera Selection Algorithm
+**Purpose**: Select optimal camera subsets for facial research based on corrected orientation
+
+**Key Methods**:
+
+1. **`categorize_cameras()`** - Categorizes cameras by angular regions
+   ```python
+   categories = {
+       'front_center': [],      # ±165° to ±180° - Face straight on
+       'front_left': [],        # -165° to -135° - Left front quarter
+       'front_right': [],       # 135° to 165° - Right front quarter
+       'left_profile': [],      # -135° to -90° - Left profile
+       'right_profile': [],     # 90° to 135° - Right profile
+       'rear_left': [],         # -90° to -45° - Left rear quarter
+       'rear_right': [],        # 45° to 90° - Right rear quarter
+       'rear_center': []        # -45° to 45° - Back of head
+   }
+   ```
+
+2. **`select_16_cameras()`** - Optimal set with maximum facial coverage
+   - Prioritizes all front center cameras (7 available)
+   - Includes front sides for 3/4 face views
+   - Minimal rear coverage for 360° consistency
+   - Returns 17 cameras (labeled as 16-camera set)
+
+3. **`select_12_cameras()`** - Balanced set for quality/storage
+   - Keeps most front center cameras (4)
+   - Reduces front sides to 2 per side
+   - Single profile camera per side
+   - Minimal rear coverage (2 cameras)
+
+4. **`select_8_cameras()`** - Minimal testing set
+   - 3 front center cameras
+   - 2 front side cameras
+   - 1 profile camera
+   - 2 rear cameras for basic coverage
+
+5. **`generate_config()`** - Creates YAML configuration files
+   - Loads base config template
+   - Updates camera list with selected IDs
+   - Saves to process_data directory
+
+**Output Files**:
+- `selection_16cam.json` - Detailed metrics for 16-camera set
+- `selection_12cam.json` - Detailed metrics for 12-camera set
+- `selection_8cam.json` - Detailed metrics for 8-camera set
+- `config_21id_16cam.yaml` - Extraction config for 16 cameras
+- `config_21id_12cam.yaml` - Extraction config for 12 cameras
+- `config_21id_8cam.yaml` - Extraction config for 8 cameras
+
+### 2. `visualize_camera_selection.py` - Selection Visualization
+**Purpose**: Generate sample frame grids and polar plots for each camera subset
+
+**Key Methods**:
+
+1. **`load_frame()`** - Loads frames from extracted data
+   - Handles frame_XXXXXX.jpg format
+   - Creates placeholder for missing data
+   - Resizes for grid display
+
+2. **`create_sample_grid()`** - Creates grid visualization
+   - Arranges cameras in rows/columns
+   - Color codes by angular position
+   - Shows camera ID, angle, and height
+   - Adds legend for position categories
+
+3. **`create_polar_plot()`** - Creates polar visualization
+   - Shows selected cameras in polar coordinates
+   - Height mapped to radius
+   - Camera IDs labeled on plot
+
+**Output Files**:
+- `sample_frames_16_cameras.png` - Grid showing 16-camera selection
+- `sample_frames_12_cameras.png` - Grid showing 12-camera selection
+- `sample_frames_8_cameras.png` - Grid showing 8-camera selection
+- `polar_plot_16cam.png` - Polar plot of 16-camera positions
+- `polar_plot_12cam.png` - Polar plot of 12-camera positions
+- `polar_plot_8cam.png` - Polar plot of 8-camera positions
+
+### 3. `visualize_all_60_cameras.py` - Full Dataset Visualization
+**Purpose**: Visualize all 60 cameras for comprehensive overview and alternative selection consideration
+
+**Key Methods**:
+
+1. **`create_60_camera_grid()`** - Creates 10x6 grid of all cameras
+   - Sorts cameras by yaw angle for logical viewing
+   - Color codes by region (front center, front sides, profiles, rear sides, rear center)
+   - Shows detailed info for each camera
+   - Includes statistics summary
+
+2. **`create_angular_distribution_plot()`** - Creates distribution analysis
+   - Top plot: Angular distribution of cameras
+   - Bottom plot: Height vs yaw angle
+   - Clearly marks front (±180°) and rear (0°) regions
+
+**Output Files**:
+- `sample_frames_60_cameras.png` - Comprehensive grid of all 60 cameras
+- `angular_distribution_60_cameras.png` - Distribution analysis plots
+
+## Camera Selection Results (After Correction)
+
+### 16-Camera Optimal Set (17 cameras)
+**Distribution**:
+- Front center (±165° to ±180°): 7 cameras
+- Front sides (±135° to ±165°): 6 cameras
+- Profiles (±90° to ±135°): 2 cameras
+- Rear (around 0°): 2 cameras
+
+**Camera IDs**: [21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 36, 49, 51, 54, 56]
+
+**Rationale**: Maximum facial detail with 76% of cameras in front hemisphere
+
+### 12-Camera Balanced Set
+**Distribution**:
+- Front center: 4 cameras
+- Front sides: 4 cameras
+- Profiles: 2 cameras
+- Rear: 2 cameras
+
+**Camera IDs**: [0, 15, 21, 23, 27, 28, 29, 30, 31, 34, 51, 56]
+
+**Rationale**: Good balance between facial coverage and storage
+
+### 8-Camera Minimal Set
+**Distribution**:
+- Front center: 3 cameras
+- Front sides: 2 cameras
+- Profile: 1 camera
+- Rear: 2 cameras
+
+**Camera IDs**: [1, 21, 27, 28, 29, 30, 34, 51]
+
+**Rationale**: Minimal viable coverage for quick testing
+
+## Storage Calculations
+
+Based on total dataset size of 5.8TB for 60 cameras across 21 subjects:
+- Per camera (all subjects): 0.0967TB
+- Per camera per subject: 4.7GB
+
+**Projections**:
+- 8 cameras: 0.77TB total (all 21 subjects fit easily)
+- 12 cameras: 1.16TB total (all 21 subjects fit)
+- 16 cameras: 1.55TB total (all 21 subjects fit in 1.8TB limit)
+
+## Key Implementation Decisions
+
+### Selection Strategy
+1. **Front-focused**: 70-80% of selected cameras in front hemisphere
+2. **Height variation**: Include multiple height levels at key angles
+3. **Minimal rear**: Only 2 cameras for back of head (not critical for facial research)
+
+### Angular Coverage
+- **Dense front coverage**: Every 15-20° in front hemisphere
+- **Sparse rear coverage**: Only key angles for 360° consistency
+- **Profile importance**: At least one camera per side for profile views
+
+### Technical Considerations
+1. All cameras have uniform narrow FOV (~29°)
+2. Cannot rely on wide-angle cameras for sparse coverage
+3. Need more cameras than initially expected for good coverage
+4. Height variation provides vertical parallax for 3D reconstruction
+
+## Validation
+
+### Visual Validation
+- Sample frame grids confirm front-facing cameras selected
+- Polar plots show good angular distribution
+- 60-camera overview allows comparison with selections
+
+### Coverage Validation
+- No gaps larger than 45° in selected subsets
+- All three height levels represented
+- Front hemisphere well covered for facial capture
+
+## Files Generated in Phase 2
+
+### Selection Outputs
+- 3 selection JSON files with detailed camera metrics
+- 3 configuration YAML files for extraction pipeline
+- 6 visualization PNGs (3 grids, 3 polar plots)
+- 2 comprehensive visualization PNGs (60-camera grid and distribution)
+
+### Documentation Updates
+- Updated `analyze_calibration_phase1.py` with correct orientation
+- Fixed hemisphere classification in camera metrics
+- Updated `Commit_20250914.md` with correct camera IDs
+- This documentation file with Phase 2 details
+
+## Lessons Learned
+
+1. **Always verify coordinate systems** - Visual inspection is crucial
+2. **Test with actual data** - Sample frames revealed orientation error
+3. **Document assumptions** - Clear documentation helps identify errors
+4. **Iterative refinement** - Initial implementation often needs correction
+
+## Next Steps
+
+1. Test extraction with 12-camera configuration on subject 0026
+2. Validate quality of facial reconstruction with selected cameras
+3. Consider cross-subject calibration validation
+4. Scale to remaining 20 subjects if quality confirmed 
