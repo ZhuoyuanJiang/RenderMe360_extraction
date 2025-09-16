@@ -53,7 +53,8 @@ class CameraCalibrationAnalyzer:
             position: Camera position [x, y, z]
 
         Returns:
-            Yaw angle in degrees (0° = front, 90° = right, -90° = left, 180° = back)
+            Yaw angle in degrees (±180° = front/face, 0° = back of head,
+                                   90° = right profile, -90° = left profile)
         """
         # Assuming subject is at origin and Y is up
         # Yaw is angle in XZ plane
@@ -141,8 +142,10 @@ class CameraCalibrationAnalyzer:
             height_class = self.classify_height(position, all_heights)
             fov_type = self.classify_fov(calib['K'])
 
-            # Determine hemisphere
-            hemisphere = 'front' if -90 <= yaw <= 90 else 'rear'
+            # Determine hemisphere (corrected: ±180° is front, 0° is rear)
+            # Front hemisphere: cameras facing the subject's face (around ±180°)
+            # Rear hemisphere: cameras facing back of head (around 0°)
+            hemisphere = 'front' if (yaw > 90 or yaw < -90) else 'rear'
 
             # Store metrics
             self.camera_metrics[cam_id] = {
