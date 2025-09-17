@@ -1,6 +1,37 @@
 #!/usr/bin/env python3
 """
 Validation script to compare new extraction with FULL_EXTRACTION_BOTH
+
+Purpose:
+--------
+This script compares two extraction directories to validate that a new extraction pipeline produces identical results compared to the original:
+  - Original: renderme360_temp/FULL_EXTRACTION_BOTH/0026_s1_all/
+  - New: renderme360_temp/test_download/subjects/0026/s1_all/
+
+What it checks:
+--------------
+1. Directory structure matches
+2. File counts by type (images, masks, json, etc.)
+3. Key files exist (metadata, calibration, audio)
+4. Sample image comparisons
+5. Total extraction size
+
+Output:
+-------
+Creates validation_results.json with detailed comparison results. 
+
+Expectation:
+----------
+The validation_results.json might indicates a PROBLEM (but this is expected):
+
+The results show "identical": false with missing directories for ALL 60 cameras:
+- Missing from_anno/images/cam_00 through cam_59
+- Missing from_raw/masks/cam_00 through cam_59
+
+These differences are INTENTIONAL - the new extraction pipeline for test_download/subjects
+purposely excludes these directories to reduce storage requirements. The validation_results.json
+file showing these missing directories indicates the extraction worked as designed, not an error.
+
 """
 
 import os

@@ -87,7 +87,7 @@ A performance is one recording session of a specific type. Subject 0026 has **19
 
 Each performance is stored as separate .smc files in both `/anno` and `/raw`.
 
-## Deep Dive: Understanding Masks vs Scan Masks
+## Understanding Masks vs Scan Masks
 
 One of the most confusing aspects of the RenderMe360 dataset is the difference between regular **masks** and **scan masks**. Here's a detailed explanation:
 

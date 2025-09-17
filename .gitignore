@@ -26,6 +26,7 @@ UNIFIED_EXTRACTION/
 test_separated/
 sampled_overview/
 avatar_research_data/
+test_download/subjects/
 
 # Download pipeline data (but keep reports and manifests)
 download_all/subjects/*/s*_all/
@@ -133,6 +134,24 @@ Thumbs.db
 *.sublime-*
 
 # ============================================
+# Logs and temporary files
+# ============================================
+*.log
+logs/
+**/logs/
+temp_smc/
+**/temp_smc/
+rsync_migration.log
+
+# ============================================
+# Temporary Commit messages and journals
+# ============================================
+*Commit_*.md
+*commit_*.md
+test_download/process_data/camera_analysis_20250915.md
+test_download/commit_message_temp.md
+
+# ============================================
 # EXCEPTIONS (Force include these)
 # ============================================
 # Keep README files
@@ -147,8 +166,15 @@ Thumbs.db
 !*.yaml
 !*.yml
 
+# Keep visualization files in camera analysis
 !test_download/visualizations/camera_selection/*.png
+!/download_all/visualizations/camera_analysis/*.png
+
 
 # But exclude large metadata
 metadata/*.json
 extracted_*/metadata/*.json
+
+# Exclude validation results (must be after !*.json)
+test_download/process_data/validation_results.json
+
