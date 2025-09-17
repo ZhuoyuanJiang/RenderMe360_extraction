@@ -147,6 +147,8 @@ Thumbs.db
 !*.yaml
 !*.yml
 
+!test_download/visualizations/camera_selection/*.png
+
 # But exclude large metadata
 metadata/*.json
 extracted_*/metadata/*.json

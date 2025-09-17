@@ -15,17 +15,33 @@
     "max": 1.618223967825521
   },
   "height_distribution": {
-    "U": 21,
-    "M": 19,
-    "L": 20
+    "U": 18,
+    "M": 24,
+    "L": 18
   },
   "fov_distribution": {
     "Small": 60,
     "Large": 0
   },
   "hemisphere_distribution": {
-    "front": 31,
-    "rear": 29
+    "front": 29,
+    "rear": 31
+  },
+  "angular_sector_distribution": {
+    "front_center_-30_to_30": 10,
+    "right_side_30_to_90": 11,
+    "left_side_-90_to_-30": 10,
+    "back_center_150_to_-150": 11,
+    "right_back_90_to_150": 10,
+    "left_back_-150_to_-90": 8
+  },
+  "angular_sector_percentages": {
+    "front_center_-30_to_30": 16.666666666666664,
+    "right_side_30_to_90": 18.333333333333332,
+    "left_side_-90_to_-30": 16.666666666666664,
+    "back_center_150_to_-150": 18.333333333333332,
+    "right_back_90_to_150": 16.666666666666664,
+    "left_back_-150_to_-90": 13.333333333333334
   },
   "angular_gaps": {
     "mean": 6.0,
@@ -33,5 +49,5 @@
     "min": 0.009466938089616406,
     "max": 19.99624564014465
   },
-  "front_coverage_percentage": 51.66666666666667
+  "front_coverage_percentage": 48.333333333333336
 }

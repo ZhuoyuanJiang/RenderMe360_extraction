@@ -7,14 +7,14 @@ Total Cameras: 60
 
 Camera Distribution:
 ----------------------------------------
-Front Hemisphere: 31 cameras (51.7%)
-Rear Hemisphere:  29 cameras (48.3%)
+Front Hemisphere: 29 cameras (48.3%)
+Rear Hemisphere:  31 cameras (51.7%)
 
 Height Distribution:
 ----------------------------------------
-Upper Ring (U):  21 cameras
-Middle Ring (M): 19 cameras
-Lower Ring (L):  20 cameras
+Upper Ring (U):  18 cameras
+Middle Ring (M): 24 cameras
+Lower Ring (L):  18 cameras
 Height Range: -1.161m to 0.059m
 
 Field of View Distribution:
@@ -38,7 +38,7 @@ Range: 1.119m to 1.618m
 
 Key Findings:
 ----------------------------------------
-1. Front hemisphere contains 52% of cameras (aligns with RenderMe360's front-dense design)
+1. Front hemisphere contains 48% of cameras (aligns with RenderMe360's front-dense design)
 2. Camera heights span 1.22m (multi-ring setup for vertical parallax)
 3. Mixed FOV setup with 60 narrow and 0 wide cameras
 4. Average angular gap of 6.0° (ideal would be 6.0° for uniform distribution)

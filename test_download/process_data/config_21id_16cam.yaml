@@ -25,7 +25,6 @@ extraction:
   - 49
   - 51
   - 54
-  - 56
   modalities:
   - metadata
   - calibration
@@ -41,7 +40,7 @@ extraction:
   separate_sources: true
   camera_selection:
     type: 16cam_optimal
-    count: 17
+    count: 16
     camera_list: *id001
 storage:
   temp_dir: /ssd2/zhuoyuan/renderme360_temp/temp_smc/

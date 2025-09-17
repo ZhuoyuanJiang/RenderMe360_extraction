@@ -15,10 +15,9 @@
     36,
     49,
     51,
-    54,
-    56
+    54
   ],
-  "count": 17,
+  "count": 16,
   "description": "16-camera optimal set with maximum facial coverage",
   "storage_per_subject_gb": 75,
   "total_storage_tb": 1.55,
@@ -136,7 +135,7 @@
     {
       "id": 31,
       "yaw_deg": -150.82805568876037,
-      "height_class": "U",
+      "height_class": "M",
       "height_m": -0.5831959515210958,
       "position": [
         -0.6125522638951765,
@@ -197,17 +196,6 @@
         1.0030028463645828,
         -0.4566084946315603,
         -0.37756606324125386
-      ]
-    },
-    {
-      "id": 56,
-      "yaw_deg": -169.26726583195435,
-      "height_class": "M",
-      "height_m": -0.45326835873852034,
-      "position": [
-        -0.20756686661418428,
-        -0.45326835873852034,
-        -1.0950868867658266
       ]
     }
   ]

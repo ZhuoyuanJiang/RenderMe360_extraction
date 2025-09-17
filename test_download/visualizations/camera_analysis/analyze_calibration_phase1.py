@@ -75,19 +75,19 @@ class CameraCalibrationAnalyzer:
         """
         height = position[1]
 
-        # Sort heights and find terciles
-        sorted_heights = sorted(all_heights)
-        lower_third = sorted_heights[len(sorted_heights) // 3]
-        upper_third = sorted_heights[2 * len(sorted_heights) // 3]
+        # Use absolute thresholds based on actual camera distribution
+        # Analysis shows three distinct height clusters:
+        # Upper ring: around -1.1m to -1.16m (above eye level)
+        # Middle ring: around -0.45m to -0.58m (eye level)
+        # Lower ring: around -0.44m to 0.06m (below eye level)
 
-        # Note: Y axis appears to be inverted in RenderMe360 (negative is up)
-        # So we invert the classification
-        if height >= upper_third:
-            return 'L'
-        elif height <= lower_third:
+        # Note: Y axis is inverted in RenderMe360 (negative is up)
+        if height < -0.9:  # Upper ring cameras
             return 'U'
-        else:
+        elif height < -0.44:  # Middle ring cameras (includes -0.58m cameras)
             return 'M'
+        else:  # Lower ring cameras
+            return 'L'
 
     def classify_fov(self, K: np.ndarray, image_width: int = 2448) -> str:
         """
@@ -384,7 +384,7 @@ def main():
     calib_path = Path("/ssd2/zhuoyuan/renderme360_temp/FULL_EXTRACTION_BOTH/0026_s1_all/from_anno/calibration/all_cameras.npy")
 
     # Output directory
-    output_dir = Path("/ssd2/zhuoyuan/renderme360_temp/download_all/visualizations/camera_analysis")
+    output_dir = Path("/ssd2/zhuoyuan/renderme360_temp/test_download/visualizations/camera_analysis")
 
     # Initialize analyzer
     analyzer = CameraCalibrationAnalyzer(calib_path)

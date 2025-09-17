@@ -87,42 +87,47 @@ class CameraSelector:
         Select 16-camera optimal set for maximum quality.
         Prioritizes facial coverage with multi-height variation.
         CORRECTED: Focus on front (±180°) for facial research.
+        Exactly 16 cameras - removes cam 56, keeps cam 28 for wider context.
         """
         categories = self.categorize_cameras()
         selected = []
 
-        # Front Center: ALL cameras (critical for facial animation - around ±180°)
-        selected.extend([cam['id'] for cam in categories['front_center']])
+        # Front Center: 6 cameras (exclude cam 56, keep cam 28 for wider view)
+        # Camera 28 provides wider context, cam 56 is closer but redundant
+        front_center_cams = categories['front_center']
+        # Filter out camera 56 (ID: 56)
+        front_center_filtered = [cam for cam in front_center_cams if cam['id'] != 56]
+        selected.extend([cam['id'] for cam in front_center_filtered])
 
-        # Front Sides: Take all or most (these show 3/4 face views)
-        # Left front side
+        # Front Sides: Take all 3 from left, 3 from right
+        # Left front side (30, 31, 32 - complete vertical coverage)
         if categories['front_left']:
             selected.extend([cam['id'] for cam in categories['front_left'][:3]])
 
-        # Right front side
+        # Right front side (21, 22, 23 - height variation)
         if categories['front_right']:
+            # Only take 3 cameras (not 4) to maintain 16 total
             selected.extend([cam['id'] for cam in categories['front_right'][:3]])
 
         # Profile Views: 2 cameras (one per side for profile views)
         # Left profile
         if categories['left_profile']:
-            # Pick middle of left profile range
+            # Pick camera 36 (-110.8°, Upper)
             selected.append(categories['left_profile'][len(categories['left_profile'])//2]['id'])
 
         # Right profile
         if categories['right_profile']:
-            # Pick middle of right profile range
+            # Pick camera 54 (110.6°, Middle)
             selected.append(categories['right_profile'][len(categories['right_profile'])//2]['id'])
 
-        # Rear: Minimal coverage (back of head - around 0°)
-        # Only 2 cameras for basic 360° consistency
+        # Rear: 2 cameras for basic 360° consistency
         if categories['rear_center']:
-            # Pick two with different heights from rear center
+            # Pick cameras 49 and 51 for rear coverage
             rear_sorted = sorted(categories['rear_center'], key=lambda x: abs(x['yaw']))
             if rear_sorted:
                 selected.append(rear_sorted[0]['id'])  # Closest to 0°
                 if len(rear_sorted) > 5:
-                    selected.append(rear_sorted[5]['id'])  # Another one with some spacing
+                    selected.append(rear_sorted[5]['id'])  # Another one with spacing
 
         return {
             'camera_ids': sorted(selected),
@@ -130,6 +135,135 @@ class CameraSelector:
             'description': '16-camera optimal set with maximum facial coverage',
             'storage_per_subject_gb': 75,
             'total_storage_tb': 1.55
+        }
+
+    def select_20_cameras(self) -> Dict:
+        """
+        Select 20-camera comprehensive set with multi-scale front coverage.
+        Keeps both cam 28 (wider) and cam 56 (closer) for optimal facial detail.
+        20 = 4×5 for efficient GPU batching.
+        """
+        categories = self.categorize_cameras()
+        selected = []
+
+        # Front Center: ALL 7 cameras including both 28 and 56
+        # Multi-scale representation critical for neural rendering
+        selected.extend([cam['id'] for cam in categories['front_center']])
+
+        # Front Sides: All cameras for complete coverage
+        # Left front side (30, 31, 32)
+        if categories['front_left']:
+            selected.extend([cam['id'] for cam in categories['front_left']])
+
+        # Right front side (21, 22, 23, 55)
+        if categories['front_right']:
+            selected.extend([cam['id'] for cam in categories['front_right']])
+
+        # Profile Views: 3 cameras (enhanced profile coverage)
+        # Left profile: cameras 36 (Upper) and 37 (Middle) for dual heights
+        if categories['left_profile']:
+            # Take cameras 36 and 37 specifically
+            left_profiles = sorted(categories['left_profile'], key=lambda x: x['yaw'])
+            # Camera 36 is at index 4 (ID 36, -110.8°, U)
+            # Camera 37 is at index 5 (ID 37, -110.4°, M)
+            for cam in left_profiles:
+                if cam['id'] in [36, 37]:
+                    selected.append(cam['id'])
+
+        # Right profile: camera 54
+        if categories['right_profile']:
+            # Camera 54 (110.6°, Middle)
+            for cam in categories['right_profile']:
+                if cam['id'] == 54:
+                    selected.append(cam['id'])
+                    break
+
+        # Rear: 3 cameras for enhanced 360° consistency
+        if categories['rear_center']:
+            rear_sorted = sorted(categories['rear_center'], key=lambda x: abs(x['yaw']))
+            # Add camera 51 (-9.3°, Upper)
+            for cam in rear_sorted:
+                if cam['id'] == 51:
+                    selected.append(cam['id'])
+                    break
+            # Add camera 49 (-29.0°, Middle)
+            for cam in rear_sorted:
+                if cam['id'] == 49:
+                    selected.append(cam['id'])
+                    break
+            # Add camera 0 (10.2°, Upper) for rear-upper coverage
+            for cam in rear_sorted:
+                if cam['id'] == 0:
+                    selected.append(cam['id'])
+                    break
+
+        return {
+            'camera_ids': sorted(selected),
+            'count': len(selected),
+            'description': '20-camera comprehensive set with multi-scale facial coverage',
+            'storage_per_subject_gb': 94,
+            'total_storage_tb': 1.94
+        }
+
+    def select_21_cameras_systematic(self) -> Dict:
+        """
+        Select 21-camera systematic set for true 360° coverage.
+
+        Strategy: Select cameras from 7 key directions forming a complete 360° ring:
+        - Front-left, Front-center, Front-right
+        - Left, Right
+        - Rear-left, Rear-center, Rear-right
+
+        Each direction gets 3 heights (Upper/Middle/Lower) = 7 × 3 = 21 cameras total.
+        This ensures both complete vertical coverage and uniform 360° distribution,
+        addressing the concern that 2 rear cameras might be insufficient for 360° reconstruction.
+
+        CORRECTED: ±180° is front (face), 0° is rear (back of head)
+        """
+        # Define systematic selection for 7 directions × 3 heights
+        # Using actual available cameras closest to ideal angles
+        systematic_selection = {
+            'front_center': [24, 28, 26],      # ±180° (171°, -171°, 170°) - U, M, L
+            'front_right': [21, 22, 23],       # ~150° (149°) - U, M, L
+            'right_profile': [15, 54, 17],     # ~110° (109°-111°) - U, M, L
+            'rear_right': [6, 7, 8],           # ~50° (49°-51°) - U, M, L
+            'rear_center': [51, 1, 2],         # ~0° (-9°, 10°, 10°) - U, M, L
+            'rear_left': [45, 49, 47],         # ~-30° to -47° - U, M, L
+            'left_profile': [36, 37, 38],      # ~-110° - U, M, L
+            'front_left': [30, 31, 32],        # ~-151° - U, M, L
+        }
+
+        selected = []
+        for direction, cams in systematic_selection.items():
+            selected.extend(cams)
+
+        # Note: This is actually 24 cameras (8 directions × 3 heights)
+        # To get exactly 21, we need to remove 3 cameras
+        # Remove redundant middle-height cameras from less critical angles
+        cameras_to_remove = [16, 54, 1]  # Remove duplicates: 16 (redundant with 54), 1 (keep 51 & 2)
+
+        # Actually select exactly 21 by choosing 7 key directions
+        selected_21 = []
+        # 7 key directions as originally specified
+        key_directions = {
+            'front_center': [24, 28, 26],      # Front
+            'front_right': [21, 22, 23],       # Front-right
+            'right': [15, 16, 17],             # Right (using right profile cameras)
+            'rear_center': [51, 1, 2],         # Rear
+            'rear_left': [45, 49, 47],         # Rear-left
+            'left': [36, 37, 38],              # Left
+            'front_left': [30, 31, 32],        # Front-left
+        }
+
+        for direction, cams in key_directions.items():
+            selected_21.extend(cams)
+
+        return {
+            'camera_ids': sorted(selected_21),
+            'count': len(selected_21),
+            'description': '21-camera systematic 360° set (7 directions × 3 heights)',
+            'storage_per_subject_gb': 98,
+            'total_storage_tb': 2.02
         }
 
     def select_12_cameras(self) -> Dict:
@@ -306,10 +440,24 @@ def main():
     # Initialize selector
     selector = CameraSelector(metrics_path)
 
-    # Generate all three selections
+    # Generate all five selections
     print("Generating camera selections for RenderMe360 dataset...")
 
-    # 16-camera optimal set
+    # 21-camera systematic set (360° uniform coverage)
+    selection_21 = selector.select_21_cameras_systematic()
+    selector.print_selection_summary(selection_21)
+    selector.save_selection_json(selection_21, output_dir / "selection_21cam_360.json")
+    selector.generate_config(selection_21['camera_ids'], '21cam_360',
+                            config_dir / "config_21id_21cam_360.yaml")
+
+    # 20-camera comprehensive set (PRIMARY for facial detail)
+    selection_20 = selector.select_20_cameras()
+    selector.print_selection_summary(selection_20)
+    selector.save_selection_json(selection_20, output_dir / "selection_20cam.json")
+    selector.generate_config(selection_20['camera_ids'], '20cam_comprehensive',
+                            config_dir / "config_21id_20cam.yaml")
+
+    # 16-camera optimal set (subset of 20)
     selection_16 = selector.select_16_cameras()
     selector.print_selection_summary(selection_16)
     selector.save_selection_json(selection_16, output_dir / "selection_16cam.json")

@@ -11,7 +11,7 @@
     "height": -1.127585477549807,
     "height_class": "U",
     "fov_type": "Small",
-    "hemisphere": "front",
+    "hemisphere": "rear",
     "focal_length": 4706.990234375
   },
   "1": {
@@ -26,7 +26,7 @@
     "height": -0.5636603582238462,
     "height_class": "M",
     "fov_type": "Small",
-    "hemisphere": "front",
+    "hemisphere": "rear",
     "focal_length": 4705.2236328125
   },
   "2": {
@@ -41,7 +41,7 @@
     "height": -0.0007407616537156159,
     "height_class": "L",
     "fov_type": "Small",
-    "hemisphere": "front",
+    "hemisphere": "rear",
     "focal_length": 4708.30078125
   },
   "3": {
@@ -56,7 +56,7 @@
     "height": -1.1490508100232146,
     "height_class": "U",
     "fov_type": "Small",
-    "hemisphere": "front",
+    "hemisphere": "rear",
     "focal_length": 4711.83203125
   },
   "4": {
@@ -71,7 +71,7 @@
     "height": -0.5625094173839948,
     "height_class": "M",
     "fov_type": "Small",
-    "hemisphere": "front",
+    "hemisphere": "rear",
     "focal_length": 4705.5126953125
   },
   "5": {
@@ -86,7 +86,7 @@
     "height": 0.018810278867732233,
     "height_class": "L",
     "fov_type": "Small",
-    "hemisphere": "front",
+    "hemisphere": "rear",
     "focal_length": 4734.0498046875
   },
   "6": {
@@ -101,7 +101,7 @@
     "height": -1.14565118386581,
     "height_class": "U",
     "fov_type": "Small",
-    "hemisphere": "front",
+    "hemisphere": "rear",
     "focal_length": 4709.2451171875
   },
   "7": {
@@ -116,7 +116,7 @@
     "height": -0.5669721297372788,
     "height_class": "M",
     "fov_type": "Small",
-    "hemisphere": "front",
+    "hemisphere": "rear",
     "focal_length": 4673.9501953125
   },
   "8": {
@@ -131,7 +131,7 @@
     "height": 0.05944638898067711,
     "height_class": "L",
     "fov_type": "Small",
-    "hemisphere": "front",
+    "hemisphere": "rear",
     "focal_length": 4725.9599609375
   },
   "9": {
@@ -146,7 +146,7 @@
     "height": -1.1363846626903742,
     "height_class": "U",
     "fov_type": "Small",
-    "hemisphere": "front",
+    "hemisphere": "rear",
     "focal_length": 4717.8896484375
   },
   "10": {
@@ -161,7 +161,7 @@
     "height": -0.5687751465929076,
     "height_class": "M",
     "fov_type": "Small",
-    "hemisphere": "front",
+    "hemisphere": "rear",
     "focal_length": 4714.86279296875
   },
   "11": {
@@ -176,7 +176,7 @@
     "height": 0.025074165053295294,
     "height_class": "L",
     "fov_type": "Small",
-    "hemisphere": "front",
+    "hemisphere": "rear",
     "focal_length": 4725.021484375
   },
   "12": {
@@ -191,7 +191,7 @@
     "height": -1.140017400801683,
     "height_class": "U",
     "fov_type": "Small",
-    "hemisphere": "front",
+    "hemisphere": "rear",
     "focal_length": 4728.5908203125
   },
   "13": {
@@ -206,7 +206,7 @@
     "height": -0.5658150780157207,
     "height_class": "M",
     "fov_type": "Small",
-    "hemisphere": "front",
+    "hemisphere": "rear",
     "focal_length": 4732.15283203125
   },
   "14": {
@@ -221,7 +221,7 @@
     "height": 0.0007407616537158379,
     "height_class": "L",
     "fov_type": "Small",
-    "hemisphere": "front",
+    "hemisphere": "rear",
     "focal_length": 4697.35595703125
   },
   "15": {
@@ -236,7 +236,7 @@
     "height": -1.1506560126030758,
     "height_class": "U",
     "fov_type": "Small",
-    "hemisphere": "rear",
+    "hemisphere": "front",
     "focal_length": 4708.0693359375
   },
   "16": {
@@ -251,7 +251,7 @@
     "height": -0.5688175260375499,
     "height_class": "M",
     "fov_type": "Small",
-    "hemisphere": "rear",
+    "hemisphere": "front",
     "focal_length": 4728.31005859375
   },
   "17": {
@@ -266,7 +266,7 @@
     "height": 0.007330781624430793,
     "height_class": "L",
     "fov_type": "Small",
-    "hemisphere": "rear",
+    "hemisphere": "front",
     "focal_length": 4709.6982421875
   },
   "18": {
@@ -281,7 +281,7 @@
     "height": -1.1405860216174082,
     "height_class": "U",
     "fov_type": "Small",
-    "hemisphere": "rear",
+    "hemisphere": "front",
     "focal_length": 4707.4033203125
   },
   "19": {
@@ -296,7 +296,7 @@
     "height": -0.5580777980092986,
     "height_class": "M",
     "fov_type": "Small",
-    "hemisphere": "rear",
+    "hemisphere": "front",
     "focal_length": 4703.39990234375
   },
   "20": {
@@ -311,7 +311,7 @@
     "height": 0.01804710804324139,
     "height_class": "L",
     "fov_type": "Small",
-    "hemisphere": "rear",
+    "hemisphere": "front",
     "focal_length": 4714.10205078125
   },
   "21": {
@@ -326,7 +326,7 @@
     "height": -1.1143751333246439,
     "height_class": "U",
     "fov_type": "Small",
-    "hemisphere": "rear",
+    "hemisphere": "front",
     "focal_length": 4709.81982421875
   },
   "22": {
@@ -341,7 +341,7 @@
     "height": -0.5509920217314108,
     "height_class": "M",
     "fov_type": "Small",
-    "hemisphere": "rear",
+    "hemisphere": "front",
     "focal_length": 4729.455078125
   },
   "23": {
@@ -356,7 +356,7 @@
     "height": 0.020754278861459197,
     "height_class": "L",
     "fov_type": "Small",
-    "hemisphere": "rear",
+    "hemisphere": "front",
     "focal_length": 4717.87109375
   },
   "24": {
@@ -371,7 +371,7 @@
     "height": -1.1440665456390227,
     "height_class": "U",
     "fov_type": "Small",
-    "hemisphere": "rear",
+    "hemisphere": "front",
     "focal_length": 4701.7109375
   },
   "25": {
@@ -386,7 +386,7 @@
     "height": -0.5787011219513785,
     "height_class": "M",
     "fov_type": "Small",
-    "hemisphere": "rear",
+    "hemisphere": "front",
     "focal_length": 4737.5791015625
   },
   "26": {
@@ -401,7 +401,7 @@
     "height": 0.012736411934108238,
     "height_class": "L",
     "fov_type": "Small",
-    "hemisphere": "rear",
+    "hemisphere": "front",
     "focal_length": 4717.259765625
   },
   "27": {
@@ -416,7 +416,7 @@
     "height": -1.148542259686082,
     "height_class": "U",
     "fov_type": "Small",
-    "hemisphere": "rear",
+    "hemisphere": "front",
     "focal_length": 4712.04833984375
   },
   "28": {
@@ -431,7 +431,7 @@
     "height": -0.5801232121701927,
     "height_class": "M",
     "fov_type": "Small",
-    "hemisphere": "rear",
+    "hemisphere": "front",
     "focal_length": 4708.40380859375
   },
   "29": {
@@ -446,7 +446,7 @@
     "height": -0.0007407616537158379,
     "height_class": "L",
     "fov_type": "Small",
-    "hemisphere": "rear",
+    "hemisphere": "front",
     "focal_length": 4737.56201171875
   },
   "30": {
@@ -461,7 +461,7 @@
     "height": -1.1455560469598474,
     "height_class": "U",
     "fov_type": "Small",
-    "hemisphere": "rear",
+    "hemisphere": "front",
     "focal_length": 4699.04248046875
   },
   "31": {
@@ -474,9 +474,9 @@
     "distance": 1.3854216517902707,
     "yaw_deg": -150.82805568876037,
     "height": -0.5831959515210958,
-    "height_class": "U",
+    "height_class": "M",
     "fov_type": "Small",
-    "hemisphere": "rear",
+    "hemisphere": "front",
     "focal_length": 4724.9365234375
   },
   "32": {
@@ -491,7 +491,7 @@
     "height": -0.0028862308883528254,
     "height_class": "L",
     "fov_type": "Small",
-    "hemisphere": "rear",
+    "hemisphere": "front",
     "focal_length": 4729.4482421875
   },
   "33": {
@@ -506,7 +506,7 @@
     "height": -1.1438805794026168,
     "height_class": "U",
     "fov_type": "Small",
-    "hemisphere": "rear",
+    "hemisphere": "front",
     "focal_length": 4717.6484375
   },
   "34": {
@@ -519,9 +519,9 @@
     "distance": 1.373654711313329,
     "yaw_deg": -130.757008237361,
     "height": -0.5815511244560311,
-    "height_class": "U",
+    "height_class": "M",
     "fov_type": "Small",
-    "hemisphere": "rear",
+    "hemisphere": "front",
     "focal_length": 4700.81494140625
   },
   "35": {
@@ -536,7 +536,7 @@
     "height": 0.005303562011149454,
     "height_class": "L",
     "fov_type": "Small",
-    "hemisphere": "rear",
+    "hemisphere": "front",
     "focal_length": 4735.72802734375
   },
   "36": {
@@ -551,7 +551,7 @@
     "height": -1.127905391821618,
     "height_class": "U",
     "fov_type": "Small",
-    "hemisphere": "rear",
+    "hemisphere": "front",
     "focal_length": 4691.3134765625
   },
   "37": {
@@ -566,7 +566,7 @@
     "height": -0.5750422512999409,
     "height_class": "M",
     "fov_type": "Small",
-    "hemisphere": "rear",
+    "hemisphere": "front",
     "focal_length": 4719.013671875
   },
   "38": {
@@ -581,7 +581,7 @@
     "height": -0.0002466750080170055,
     "height_class": "L",
     "fov_type": "Small",
-    "hemisphere": "rear",
+    "hemisphere": "front",
     "focal_length": 4769.5439453125
   },
   "39": {
@@ -596,7 +596,7 @@
     "height": -1.1440271677085427,
     "height_class": "U",
     "fov_type": "Small",
-    "hemisphere": "front",
+    "hemisphere": "rear",
     "focal_length": 4677.7900390625
   },
   "40": {
@@ -609,9 +609,9 @@
     "distance": 1.3440885764770176,
     "yaw_deg": -90.00401979840142,
     "height": -0.5806533617666129,
-    "height_class": "U",
+    "height_class": "M",
     "fov_type": "Small",
-    "hemisphere": "rear",
+    "hemisphere": "front",
     "focal_length": 4713.88134765625
   },
   "41": {
@@ -626,7 +626,7 @@
     "height": 0.0007407616537158379,
     "height_class": "L",
     "fov_type": "Small",
-    "hemisphere": "front",
+    "hemisphere": "rear",
     "focal_length": 4736.19921875
   },
   "42": {
@@ -641,7 +641,7 @@
     "height": -1.127935760451869,
     "height_class": "U",
     "fov_type": "Small",
-    "hemisphere": "front",
+    "hemisphere": "rear",
     "focal_length": 4707.60986328125
   },
   "43": {
@@ -656,7 +656,7 @@
     "height": -0.5738237352266948,
     "height_class": "M",
     "fov_type": "Small",
-    "hemisphere": "front",
+    "hemisphere": "rear",
     "focal_length": 4706.37646484375
   },
   "44": {
@@ -671,7 +671,7 @@
     "height": 0.011061413113467866,
     "height_class": "L",
     "fov_type": "Small",
-    "hemisphere": "front",
+    "hemisphere": "rear",
     "focal_length": 4719.31689453125
   },
   "45": {
@@ -686,7 +686,7 @@
     "height": -1.1285973561122613,
     "height_class": "U",
     "fov_type": "Small",
-    "hemisphere": "front",
+    "hemisphere": "rear",
     "focal_length": 4713.15771484375
   },
   "46": {
@@ -701,7 +701,7 @@
     "height": -0.5553913964845149,
     "height_class": "M",
     "fov_type": "Small",
-    "hemisphere": "front",
+    "hemisphere": "rear",
     "focal_length": 4713.314453125
   },
   "47": {
@@ -716,7 +716,7 @@
     "height": 0.004046261948550844,
     "height_class": "L",
     "fov_type": "Small",
-    "hemisphere": "front",
+    "hemisphere": "rear",
     "focal_length": 4716.162109375
   },
   "48": {
@@ -731,7 +731,7 @@
     "height": -1.135445884974249,
     "height_class": "U",
     "fov_type": "Small",
-    "hemisphere": "front",
+    "hemisphere": "rear",
     "focal_length": 4690.80859375
   },
   "49": {
@@ -746,7 +746,7 @@
     "height": -0.5277116223118328,
     "height_class": "M",
     "fov_type": "Small",
-    "hemisphere": "front",
+    "hemisphere": "rear",
     "focal_length": 4708.083984375
   },
   "50": {
@@ -761,7 +761,7 @@
     "height": 0.009966709711017208,
     "height_class": "L",
     "fov_type": "Small",
-    "hemisphere": "front",
+    "hemisphere": "rear",
     "focal_length": 4723.119140625
   },
   "51": {
@@ -776,7 +776,7 @@
     "height": -1.1612192589181307,
     "height_class": "U",
     "fov_type": "Small",
-    "hemisphere": "front",
+    "hemisphere": "rear",
     "focal_length": 4705.4794921875
   },
   "52": {
@@ -791,7 +791,7 @@
     "height": -0.44718293823758304,
     "height_class": "M",
     "fov_type": "Small",
-    "hemisphere": "front",
+    "hemisphere": "rear",
     "focal_length": 4714.953125
   },
   "53": {
@@ -804,9 +804,9 @@
     "distance": 1.1976456903711414,
     "yaw_deg": 70.87503578861806,
     "height": -0.4466512109967974,
-    "height_class": "L",
+    "height_class": "M",
     "fov_type": "Small",
-    "hemisphere": "front",
+    "hemisphere": "rear",
     "focal_length": 4732.9150390625
   },
   "54": {
@@ -821,7 +821,7 @@
     "height": -0.4566084946315603,
     "height_class": "M",
     "fov_type": "Small",
-    "hemisphere": "rear",
+    "hemisphere": "front",
     "focal_length": 4715.2841796875
   },
   "55": {
@@ -836,7 +836,7 @@
     "height": -0.42322368764563556,
     "height_class": "L",
     "fov_type": "Small",
-    "hemisphere": "rear",
+    "hemisphere": "front",
     "focal_length": 4729.04541015625
   },
   "56": {
@@ -851,7 +851,7 @@
     "height": -0.45326835873852034,
     "height_class": "M",
     "fov_type": "Small",
-    "hemisphere": "rear",
+    "hemisphere": "front",
     "focal_length": 4692.14453125
   },
   "57": {
@@ -866,7 +866,7 @@
     "height": -0.45786444337227694,
     "height_class": "M",
     "fov_type": "Small",
-    "hemisphere": "rear",
+    "hemisphere": "front",
     "focal_length": 4723.625
   },
   "58": {
@@ -881,7 +881,7 @@
     "height": -0.4601985537964115,
     "height_class": "M",
     "fov_type": "Small",
-    "hemisphere": "front",
+    "hemisphere": "rear",
     "focal_length": 4721.44384765625
   },
   "59": {
@@ -894,9 +894,9 @@
     "distance": 1.1577935071974421,
     "yaw_deg": -47.0444132234736,
     "height": -0.44080912709089926,
-    "height_class": "L",
+    "height_class": "M",
     "fov_type": "Small",
-    "hemisphere": "front",
+    "hemisphere": "rear",
     "focal_length": 4715.46337890625
   }
 }

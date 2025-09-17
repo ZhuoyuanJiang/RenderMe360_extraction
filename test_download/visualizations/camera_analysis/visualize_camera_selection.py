@@ -89,8 +89,12 @@ class CameraVisualization:
             rows, cols = 2, 4
         elif n_cameras <= 12:
             rows, cols = 3, 4
-        else:  # 16 cameras
+        elif n_cameras <= 16:
             rows, cols = 4, 4
+        elif n_cameras <= 20:
+            rows, cols = 4, 5
+        else:  # 21 cameras
+            rows, cols = 3, 7
 
         # Create figure
         fig = plt.figure(figsize=(20, rows * 5))
@@ -252,7 +256,7 @@ def main():
     print(f"Using frame number: {viz.frame_number}")
 
     # Generate visualizations for each configuration
-    configs = ['16cam', '12cam', '8cam']
+    configs = ['21cam_360', '20cam', '16cam', '12cam', '8cam']
 
     for config in configs:
         print(f"\nProcessing {config} configuration...")
