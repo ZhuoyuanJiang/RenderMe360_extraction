@@ -8,10 +8,10 @@ Great question! Here's a **step-by-step guide** for reproducing this setup in th
 
 ```bash
 # 1. Create the parent directory
-mkdir -p /ssd2/username/renderme360_temp
+mkdir -p /ssd4/username/renderme360_temp
 
 # 2. Clone directly into the directory (this is the key!)
-cd /ssd2/username/renderme360_temp
+cd /ssd4/username/renderme360_temp
 git clone https://github.com/ZhuoyuanJiang/RenderMe360_extraction.git .
 #                                                                    ^ Note the dot!
 ```
@@ -27,7 +27,7 @@ Here's the exact process to download both Google Drive folders:
 ### 1. **Setup Directory Structure**
 
 ```bash
-cd /ssd2/zhuoyuan/renderme360_temp
+cd /ssd4/zhuoyuan/renderme360_temp
 mkdir -p test_download/raw test_download/anno
 ```
 
@@ -106,7 +106,7 @@ If you want to rename all files in both directories with a single command:
 
 ```bash
 # From the test_download directory
-cd /ssd2/zhuoyuan/renderme360_temp/test_download
+cd /ssd4/zhuoyuan/renderme360_temp/test_download
 
 # Rename all files in anno directory
 for file in anno/"Copy of "*.smc; do 
@@ -162,7 +162,7 @@ test_download/
 If you want to rename all "Copy of " files recursively in one go:
 
 ```bash
-find /ssd2/zhuoyuan/renderme360_temp/test_download -name "Copy of *.smc" -type f | while read file; do
+find /ssd4/zhuoyuan/renderme360_temp/test_download -name "Copy of *.smc" -type f | while read file; do
     dir=$(dirname "$file")
     basename=$(basename "$file")
     newname="${basename#Copy of }"
@@ -204,7 +204,7 @@ pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
 ### **6.2 Navigate to Processing Directory**
 
 ```bash
-cd /ssd2/zhuoyuan/renderme360_temp/test_download/process_data
+cd /ssd4/zhuoyuan/renderme360_temp/test_download/process_data
 ```
 
 ### **6.3 Extract Performances**
@@ -267,7 +267,7 @@ echo "yes" | python extract_0026_FULL.py --performance e0 --separate
 ### **6.5 Expected Output Structure**
 
 ```
-/ssd2/zhuoyuan/renderme360_temp/FULL_EXTRACTION/
+/ssd4/zhuoyuan/renderme360_temp/FULL_EXTRACTION/
 └── 0026_[performance]/
     ├── .extraction_complete      # Marker file indicating successful completion
     ├── extraction_info.txt       # Describes the separation structure
@@ -351,13 +351,13 @@ While extraction is running, you can monitor progress in another terminal:
 
 ```bash
 # Check which performances are complete
-ls -la /ssd2/zhuoyuan/renderme360_temp/FULL_EXTRACTION/*/extraction_complete 2>/dev/null
+ls -la /ssd4/zhuoyuan/renderme360_temp/FULL_EXTRACTION/*/extraction_complete 2>/dev/null
 
 # Check current extraction size
-du -sh /ssd2/zhuoyuan/renderme360_temp/FULL_EXTRACTION/
+du -sh /ssd4/zhuoyuan/renderme360_temp/FULL_EXTRACTION/
 
 # Watch real-time size growth
-watch -n 5 'du -sh /ssd2/zhuoyuan/renderme360_temp/FULL_EXTRACTION/*/ | sort -h'
+watch -n 5 'du -sh /ssd4/zhuoyuan/renderme360_temp/FULL_EXTRACTION/*/ | sort -h'
 ```
 
 ### **6.8 Known Issues and Troubleshooting**
@@ -381,7 +381,7 @@ watch -n 5 'du -sh /ssd2/zhuoyuan/renderme360_temp/FULL_EXTRACTION/*/ | sort -h'
 
 ```bash
 # Remove the incomplete extraction marker
-rm /ssd2/zhuoyuan/renderme360_temp/FULL_EXTRACTION/0026_[performance]/.extraction_complete
+rm /ssd4/zhuoyuan/renderme360_temp/FULL_EXTRACTION/0026_[performance]/.extraction_complete
 
 # Run extraction again - it will resume from where it left off
 ./extract_all_0026.sh
@@ -391,7 +391,7 @@ rm /ssd2/zhuoyuan/renderme360_temp/FULL_EXTRACTION/0026_[performance]/.extractio
 
 ```bash
 # Remove the entire performance directory
-rm -rf /ssd2/zhuoyuan/renderme360_temp/FULL_EXTRACTION/0026_[performance]/
+rm -rf /ssd4/zhuoyuan/renderme360_temp/FULL_EXTRACTION/0026_[performance]/
 
 # Run extraction again
 ./extract_all_0026.sh

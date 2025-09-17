@@ -55,17 +55,17 @@ The new extraction script is **MORE EFFICIENT** because it:
 
 ```bash
 # Check if directories were empty in original
-ls -la /ssd2/zhuoyuan/renderme360_temp/FULL_EXTRACTION_BOTH/0026_s1_all/from_raw/masks/cam_00/
+ls -la /ssd4/zhuoyuan/renderme360_temp/FULL_EXTRACTION_BOTH/0026_s1_all/from_raw/masks/cam_00/
 # Result: Empty (only . and ..)
 
-ls -la /ssd2/zhuoyuan/renderme360_temp/FULL_EXTRACTION_BOTH/0026_s1_all/from_anno/images/cam_00/
+ls -la /ssd4/zhuoyuan/renderme360_temp/FULL_EXTRACTION_BOTH/0026_s1_all/from_anno/images/cam_00/
 # Result: Empty (only . and ..)
 
 # Verify file counts match
-find /ssd2/zhuoyuan/renderme360_temp/FULL_EXTRACTION_BOTH/0026_s1_all -name "*.jpg" | wc -l
+find /ssd4/zhuoyuan/renderme360_temp/FULL_EXTRACTION_BOTH/0026_s1_all -name "*.jpg" | wc -l
 # Result: 151,740
 
-find /ssd2/zhuoyuan/renderme360_temp/test_download/subjects/0026/s1_all -name "*.jpg" | wc -l
+find /ssd4/zhuoyuan/renderme360_temp/test_download/subjects/0026/s1_all -name "*.jpg" | wc -l
 # Result: 151,740
 ```
 

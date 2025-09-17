@@ -369,7 +369,7 @@ class CameraSelector:
             output_path: Path to save the config file
         """
         # Load base config as template
-        base_config_path = Path("/ssd2/zhuoyuan/renderme360_temp/test_download/process_data/config_21id.yaml")
+        base_config_path = Path("/ssd4/zhuoyuan/renderme360_temp/test_download/process_data/config_21id.yaml")
         with open(base_config_path, 'r') as f:
             config = yaml.safe_load(f)
 
@@ -429,13 +429,13 @@ class CameraSelector:
 def main():
     """Main execution function."""
     # Path to camera metrics from Phase 1
-    metrics_path = Path("/ssd2/zhuoyuan/renderme360_temp/test_download/visualizations/camera_analysis/camera_metrics_60cam.json")
+    metrics_path = Path("/ssd4/zhuoyuan/renderme360_temp/test_download/visualizations/camera_analysis/camera_metrics_60cam.json")
 
     # Output directory for configs and selections
-    output_dir = Path("/ssd2/zhuoyuan/renderme360_temp/test_download/visualizations/camera_selection")
+    output_dir = Path("/ssd4/zhuoyuan/renderme360_temp/test_download/visualizations/camera_selection")
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    config_dir = Path("/ssd2/zhuoyuan/renderme360_temp/test_download/process_data")
+    config_dir = Path("/ssd4/zhuoyuan/renderme360_temp/test_download/process_data")
 
     # Initialize selector
     selector = CameraSelector(metrics_path)

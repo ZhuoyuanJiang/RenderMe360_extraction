@@ -14,7 +14,7 @@ def load_camera_data(subject_id="0026"):
     """Load camera calibration data and compute positions."""
     
     # Load calibration file
-    base_dir = Path(f'/ssd2/zhuoyuan/renderme360_temp/download_all/subjects/{subject_id}')
+    base_dir = Path(f'/ssd4/zhuoyuan/renderme360_temp/download_all/subjects/{subject_id}')
     calib_file = base_dir / 's3_all' / 'calibration' / 'all_cameras.npy'
     
     if not calib_file.exists():
@@ -475,6 +475,6 @@ def create_standalone_html(output_path):
     print("  ✓ Used without Python or any dependencies")
 
 if __name__ == "__main__":
-    output_path = Path('/ssd2/zhuoyuan/renderme360_temp/download_all/visualizations/camera_analysis/camera_visualization_interactive.html')
+    output_path = Path('/ssd4/zhuoyuan/renderme360_temp/download_all/visualizations/camera_analysis/camera_visualization_interactive.html')
     output_path.parent.mkdir(parents=True, exist_ok=True)
     create_standalone_html(output_path)

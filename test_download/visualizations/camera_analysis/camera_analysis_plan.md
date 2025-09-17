@@ -38,29 +38,29 @@ You are helping with a computer vision research project. We have a 360-degree ca
 **Your task**: Analyze the camera setup and recommend which cameras to keep.
 
 **Available Resources**:
-1. **Existing extraction** at `/ssd2/zhuoyuan/renderme360_temp/FULL_EXTRACTION_BOTH/0026_s1_all/`
+1. **Existing extraction** at `/ssd4/zhuoyuan/renderme360_temp/FULL_EXTRACTION_BOTH/0026_s1_all/`
    - Contains images from all 60 cameras
    - Structure: `from_raw/images/cam_00/` through `cam_59/`
    - Each camera has 2529 frames 
 
-2. **Calibration data** at `/ssd2/zhuoyuan/renderme360_temp/FULL_EXTRACTION_BOTH/0026_s1_all/from_anno/calibration/`
+2. **Calibration data** at `/ssd4/zhuoyuan/renderme360_temp/FULL_EXTRACTION_BOTH/0026_s1_all/from_anno/calibration/`
    - Camera matrices for all 60 cameras
    - Can be loaded with numpy: `np.load('all_cameras.npy', allow_pickle=True)`
 
-3. **Previous Camera selection thought process** at `/ssd2/zhuoyuan/renderme360_temp/test_download/process_data/camera_analysis_20250915.md`
+3. **Previous Camera selection thought process** at `/ssd4/zhuoyuan/renderme360_temp/test_download/process_data/camera_analysis_20250915.md`
    - Some camera position analysis already done, evaluate the analysis and tell me what do you think
    - Check `camera_analysis.ipynb` for previous work
 
 **Specific Tasks**:
 
 1. **Camera Position Analysis**
-   - Visualize camera arrangement like `/ssd2/zhuoyuan/renderme360_temp/download_all/visualizations/camera_analysis/all_38_cameras_grid.png` for all cameras
-   - Visualize camera arrangement of your propose solution (or solutions) like `/ssd2/zhuoyuan/renderme360_temp/download_all/visualizations/camera_analysis/sample_frames_12_cameras.png` by creating a `/ssd2/zhuoyuan/renderme360_temp/test_download/visualizations/camera_analysis` folder and put solutions there.
+   - Visualize camera arrangement like `/ssd4/zhuoyuan/renderme360_temp/download_all/visualizations/camera_analysis/all_38_cameras_grid.png` for all cameras
+   - Visualize camera arrangement of your propose solution (or solutions) like `/ssd4/zhuoyuan/renderme360_temp/download_all/visualizations/camera_analysis/sample_frames_12_cameras.png` by creating a `/ssd4/zhuoyuan/renderme360_temp/test_download/visualizations/camera_analysis` folder and put solutions there.
    - Load calibration data to get 3D camera positions if possible (put this in the end because this might be complicated, ask me if I want you to do this and only do after my permission)
    - Identify front-facing vs side vs back cameras
 
 2. **Camera Selection Criteria**
-   - evaluate the `/ssd2/zhuoyuan/renderme360_temp/test_download/process_data/camera_analysis_20250915.md` and propose selection methods 
+   - evaluate the `/ssd4/zhuoyuan/renderme360_temp/test_download/process_data/camera_analysis_20250915.md` and propose selection methods 
 
 3. **You can consider Implementation**
    ```python
@@ -113,10 +113,10 @@ You are helping with a computer vision research project. We have a 360-degree ca
 5. Monitor progress over the week
 
 **File Locations**:
-- Main extraction script: `/ssd2/zhuoyuan/renderme360_temp/test_download/process_data/extract_subject_FULL_both.py`
-- Config file: `/ssd2/zhuoyuan/renderme360_temp/test_download/process_data/config_21id.yaml`
-- Previous extraction: `/ssd2/zhuoyuan/renderme360_temp/FULL_EXTRACTION_BOTH/`
-- New extractions go to: `/ssd2/zhuoyuan/renderme360_temp/test_download/subjects/`
+- Main extraction script: `/ssd4/zhuoyuan/renderme360_temp/test_download/process_data/extract_subject_FULL_both.py`
+- Config file: `/ssd4/zhuoyuan/renderme360_temp/test_download/process_data/config_21id.yaml`
+- Previous extraction: `/ssd4/zhuoyuan/renderme360_temp/FULL_EXTRACTION_BOTH/`
+- New extractions go to: `/ssd4/zhuoyuan/renderme360_temp/test_download/subjects/`
 
 Please analyze the camera setup and provide recommendations for the optimal camera subset for audio-driven avatar research.
 
@@ -145,7 +145,7 @@ Please analyze the camera setup and provide recommendations for the optimal came
 - Determine height ring membership
 - Output: Camera metrics CSV/JSON for selection algorithm
 
-**Output Location**: `/ssd2/zhuoyuan/renderme360_temp/test_download/visualizations/camera_analysis`
+**Output Location**: `/ssd4/zhuoyuan/renderme360_temp/test_download/visualizations/camera_analysis`
 - `camera_metrics_60cam.json` - Full metrics for all 60 cameras
 - `camera_analysis_report.txt` - Summary statistics
 

@@ -187,8 +187,8 @@ def compare_directories(old_dir, new_dir, performance):
     return results
 
 def main():
-    old_base = '/ssd2/zhuoyuan/renderme360_temp/download_all/subjects/0018'
-    new_base = '/ssd2/zhuoyuan/renderme360_temp/download_all/subjects/0018_temp'
+    old_base = '/ssd4/zhuoyuan/renderme360_temp/download_all/subjects/0018'
+    new_base = '/ssd4/zhuoyuan/renderme360_temp/download_all/subjects/0018_temp'
     
     performances = ['s1_all', 's2_all', 's3_all', 's4_all', 's5_all', 's6_all']
     

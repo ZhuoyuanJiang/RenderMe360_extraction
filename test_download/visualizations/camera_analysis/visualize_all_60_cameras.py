@@ -270,9 +270,9 @@ class FullCameraVisualization:
 def main():
     """Main execution function."""
     # Paths
-    base_path = Path("/ssd2/zhuoyuan/renderme360_temp/FULL_EXTRACTION_BOTH/0026_s1_all")
-    metrics_path = Path("/ssd2/zhuoyuan/renderme360_temp/test_download/visualizations/camera_analysis/camera_metrics_60cam.json")
-    output_dir = Path("/ssd2/zhuoyuan/renderme360_temp/test_download/visualizations/camera_selection")
+    base_path = Path("/ssd4/zhuoyuan/renderme360_temp/FULL_EXTRACTION_BOTH/0026_s1_all")
+    metrics_path = Path("/ssd4/zhuoyuan/renderme360_temp/test_download/visualizations/camera_analysis/camera_metrics_60cam.json")
+    output_dir = Path("/ssd4/zhuoyuan/renderme360_temp/test_download/visualizations/camera_selection")
 
     # Initialize visualizer
     viz = FullCameraVisualization(base_path, metrics_path)

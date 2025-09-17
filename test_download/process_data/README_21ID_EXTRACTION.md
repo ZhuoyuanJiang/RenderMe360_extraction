@@ -210,7 +210,7 @@ The pipeline creates `MANIFEST_21ID.csv` to track extraction progress:
 ### Real-time Download Monitoring
 ```bash
 # Watch download progress (file size growing)
-watch -n 2 'ls -lah /ssd2/zhuoyuan/renderme360_temp/temp_smc/*.smc 2>/dev/null | awk "{print \$5, \$9}"'
+watch -n 2 'ls -lah /ssd4/zhuoyuan/renderme360_temp/temp_smc/*.smc 2>/dev/null | awk "{print \$5, \$9}"'
 ```
 
 This command shows:
@@ -227,7 +227,7 @@ Expected file sizes:
 ### Check Extraction Log
 ```bash
 # Follow the latest log file
-tail -f /ssd2/zhuoyuan/renderme360_temp/test_download/logs/extraction_*.log
+tail -f /ssd4/zhuoyuan/renderme360_temp/test_download/logs/extraction_*.log
 ```
 
 ## Troubleshooting
@@ -313,7 +313,7 @@ python extract_subject_FULL_both.py --dry-run
 ## Support
 
 If you encounter issues:
-1. Check the log files in `/ssd2/zhuoyuan/renderme360_temp/test_download/logs/`
+1. Check the log files in `/ssd4/zhuoyuan/renderme360_temp/test_download/logs/`
 2. Review the MANIFEST_21ID.csv for extraction status
 3. Run `test_extraction_21id.py` to verify setup
 4. Ensure Google Drive folder ID is correctly configured

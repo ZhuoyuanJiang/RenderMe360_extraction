@@ -224,7 +224,7 @@ if __name__ == "__main__":
     import argparse
     
     parser = argparse.ArgumentParser(description='Inspect extracted RenderMe360 data')
-    parser.add_argument('--dir', default='/ssd2/zhuoyuan/renderme360_temp/FULL_EXTRACTION',
+    parser.add_argument('--dir', default='/ssd4/zhuoyuan/renderme360_temp/FULL_EXTRACTION',
                         help='Extraction directory')
     parser.add_argument('--html', action='store_true', help='Create HTML overview')
     parser.add_argument('--grid', action='store_true', help='Create sample grid image')

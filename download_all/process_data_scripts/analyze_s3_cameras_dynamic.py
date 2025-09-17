@@ -583,10 +583,10 @@ def main():
     parser.add_argument('--subjects', nargs='+', default=['0018', '0019', '0026'],
                        help='Subject IDs to analyze')
     parser.add_argument('--base_dir', 
-                       default='/ssd2/zhuoyuan/renderme360_temp/download_all/subjects',
+                       default='/ssd4/zhuoyuan/renderme360_temp/download_all/subjects',
                        help='Base directory containing subject folders')
     parser.add_argument('--output_dir', 
-                       default='/ssd2/zhuoyuan/renderme360_temp/download_all/visualizations/camera_analysis',
+                       default='/ssd4/zhuoyuan/renderme360_temp/download_all/visualizations/camera_analysis',
                        help='Output directory for visualizations and reports')
     parser.add_argument('--frame', type=int, default=100,
                        help='Frame ID for sample images')

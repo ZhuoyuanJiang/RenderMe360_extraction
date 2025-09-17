@@ -14,7 +14,7 @@ def create_cylindrical_visualization(output_path=None):
     """Create improved 3D visualization showing cylindrical camera arrangement."""
     
     # Load calibration data
-    base_dir = Path('/ssd2/zhuoyuan/renderme360_temp/download_all/subjects/0026')
+    base_dir = Path('/ssd4/zhuoyuan/renderme360_temp/download_all/subjects/0026')
     calib_file = base_dir / 's3_all' / 'calibration' / 'all_cameras.npy'
     
     if not calib_file.exists():
@@ -209,6 +209,6 @@ def create_cylindrical_visualization(output_path=None):
         print(f"  {h_level:.1f}m: {len(height_levels[h_level])} cameras - {height_levels[h_level]}")
 
 if __name__ == "__main__":
-    output_path = Path('/ssd2/zhuoyuan/renderme360_temp/download_all/visualizations/camera_analysis/cylindrical_camera_visualization.png')
+    output_path = Path('/ssd4/zhuoyuan/renderme360_temp/download_all/visualizations/camera_analysis/cylindrical_camera_visualization.png')
     output_path.parent.mkdir(parents=True, exist_ok=True)
     create_cylindrical_visualization(output_path)

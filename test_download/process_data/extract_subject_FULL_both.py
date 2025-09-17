@@ -97,10 +97,10 @@ class RenderMe360ExtractorFull:
                 'separate_sources': True  # Separate from_anno and from_raw
             },
             'storage': {
-                'temp_dir': '/ssd2/zhuoyuan/renderme360_temp/temp_smc/',
-                'output_dir': '/ssd2/zhuoyuan/renderme360_temp/test_download/subjects/',
-                'manifest_path': '/ssd2/zhuoyuan/renderme360_temp/test_download/MANIFEST_21ID.csv',
-                'log_dir': '/ssd2/zhuoyuan/renderme360_temp/test_download/logs/'
+                'temp_dir': '/ssd4/zhuoyuan/renderme360_temp/temp_smc/',
+                'output_dir': '/ssd4/zhuoyuan/renderme360_temp/test_download/subjects/',
+                'manifest_path': '/ssd4/zhuoyuan/renderme360_temp/test_download/MANIFEST_21ID.csv',
+                'log_dir': '/ssd4/zhuoyuan/renderme360_temp/test_download/logs/'
             },
             'processing': {
                 'delete_smc_after_extraction': True,

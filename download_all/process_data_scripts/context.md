@@ -27,7 +27,7 @@ We're dealing with the RenderMe360 dataset which has undergone significant chang
 - Streaming approach still beneficial for managing 500 subjects total
 
 ### Our Previous Work
-Located in `/ssd2/zhuoyuan/renderme360_temp/test_download/process_data/`:
+Located in `/ssd4/zhuoyuan/renderme360_temp/test_download/process_data/`:
 - `renderme_360_reader.py`: Original SMCReader class
 - `extract_0026_FULL.py`: Main extraction script (assumes masks in raw files - incorrect)
 - `extract_0026_FULL_both.py`: Brute force version that correctly finds masks in anno files
@@ -79,7 +79,7 @@ Create a streaming pipeline that:
 # Implementation Plan
 
 ## Core Objective
-Create a script in `/ssd2/zhuoyuan/renderme360_temp/download_all/process_data_scripts/` that:
+Create a script in `/ssd4/zhuoyuan/renderme360_temp/download_all/process_data_scripts/` that:
 1. Downloads ONLY speech performances (s1_all through s6_all) from Google Drive
 2. Processes all 6 speech SMC files for one subject before moving to next
 3. Deletes SMC files immediately after extraction to save space
@@ -136,8 +136,8 @@ extraction:
   modalities: ["images", "masks", "audio", "calibration", "keypoints2d", "keypoints3d"]
   
 storage:
-  temp_dir: "/ssd2/zhuoyuan/renderme360_temp/temp_smc/"
-  output_dir: "/ssd2/zhuoyuan/renderme360_temp/download_all/subjects/"
+  temp_dir: "/ssd4/zhuoyuan/renderme360_temp/temp_smc/"
+  output_dir: "/ssd4/zhuoyuan/renderme360_temp/download_all/subjects/"
   max_temp_size_gb: 50  # Safety limit for temp directory
 ```
 
@@ -151,7 +151,7 @@ Based on `extract_0026_FULL_both.py` but adapted for single SMC file:
 
 ## Output Structure
 ```
-/ssd2/zhuoyuan/renderme360_temp/download_all/
+/ssd4/zhuoyuan/renderme360_temp/download_all/
   subjects/
     0018/
       s1_all/

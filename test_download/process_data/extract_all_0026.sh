@@ -16,7 +16,7 @@ performances=(
 echo "============================================================"
 echo "EXTRACTING ALL PERFORMANCES FOR SUBJECT 0026"
 echo "Total performances: ${#performances[@]}"
-echo "Output: /ssd2/zhuoyuan/renderme360_temp/FULL_EXTRACTION/"
+echo "Output: /ssd4/zhuoyuan/renderme360_temp/FULL_EXTRACTION/"
 echo "============================================================"
 echo ""
 echo "Features:"
@@ -28,7 +28,7 @@ echo ""
 # Count already completed extractions
 completed=0
 for perf in "${performances[@]}"; do
-    if [ -f "/ssd2/zhuoyuan/renderme360_temp/FULL_EXTRACTION/0026_${perf}/.extraction_complete" ]; then
+    if [ -f "/ssd4/zhuoyuan/renderme360_temp/FULL_EXTRACTION/0026_${perf}/.extraction_complete" ]; then
         ((completed++))
     fi
 done
@@ -42,7 +42,7 @@ failed_list=()
 
 for i in "${!performances[@]}"; do
     perf="${performances[$i]}"
-    output_dir="/ssd2/zhuoyuan/renderme360_temp/FULL_EXTRACTION/0026_${perf}"
+    output_dir="/ssd4/zhuoyuan/renderme360_temp/FULL_EXTRACTION/0026_${perf}"
     
     # Check if already extracted
     if [ -f "${output_dir}/.extraction_complete" ]; then
@@ -97,7 +97,7 @@ fi
 # Show total size
 echo ""
 echo "Calculating total extracted size..."
-total_size=$(du -sh /ssd2/zhuoyuan/renderme360_temp/FULL_EXTRACTION/ 2>/dev/null | cut -f1)
+total_size=$(du -sh /ssd4/zhuoyuan/renderme360_temp/FULL_EXTRACTION/ 2>/dev/null | cut -f1)
 echo "Total size: $total_size"
 echo ""
-echo "Output location: /ssd2/zhuoyuan/renderme360_temp/FULL_EXTRACTION/"
+echo "Output location: /ssd4/zhuoyuan/renderme360_temp/FULL_EXTRACTION/"

@@ -244,4 +244,4 @@ We're showing 4 representative performances (not listing all 19 for brevity):
 
 ---
 *Report generated: 2025-09-03*
-*Data location: /ssd2/zhuoyuan/renderme360_temp/FULL_EXTRACTION*
+*Data location: /ssd4/zhuoyuan/renderme360_temp/FULL_EXTRACTION*

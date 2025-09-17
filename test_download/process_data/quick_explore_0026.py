@@ -107,8 +107,8 @@ def explore_smc_file(smc_path):
 
 def main():
     # Define paths
-    anno_dir = Path('/ssd2/zhuoyuan/renderme360_temp/test_download/anno')
-    raw_dir = Path('/ssd2/zhuoyuan/renderme360_temp/test_download/raw/0026')
+    anno_dir = Path('/ssd4/zhuoyuan/renderme360_temp/test_download/anno')
+    raw_dir = Path('/ssd4/zhuoyuan/renderme360_temp/test_download/raw/0026')
     
     print("="*60)
     print("RenderMe360 Quick Explorer - Subject 0026")

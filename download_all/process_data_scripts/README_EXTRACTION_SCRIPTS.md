@@ -77,7 +77,7 @@ python extract_streaming_gdrive.py --config config.yaml # put only one subject i
 python extract_streaming_gdrive.py --subject 0018 --performance s1_all
 
 # Monitor logs in real-time (in another terminal)
-tail -f /ssd2/zhuoyuan/renderme360_temp/download_all/logs/extraction_*.log
+tail -f /ssd4/zhuoyuan/renderme360_temp/download_all/logs/extraction_*.log
 ```
 
 ### Step 2: Visualize and Select Cameras
@@ -87,18 +87,18 @@ After extracting the first subject, create visualization to select camera subset
 ```bash
 # Create camera grid visualization
 python visualization.py camera_grid \
-    --subject_dir /ssd2/zhuoyuan/renderme360_temp/download_all/subjects/0018 \
+    --subject_dir /ssd4/zhuoyuan/renderme360_temp/download_all/subjects/0018 \
     --performance s1_all \
     --frame 100 \
     --output visualizations/camera_grid.png
 
 # Analyze camera positions from calibration
 python visualization.py analyze \
-    --subject_dir /ssd2/zhuoyuan/renderme360_temp/download_all/subjects/0018
+    --subject_dir /ssd4/zhuoyuan/renderme360_temp/download_all/subjects/0018
 
 # View extraction progress
 python visualization.py summary \
-    --manifest /ssd2/zhuoyuan/renderme360_temp/download_all/MANIFEST.csv
+    --manifest /ssd4/zhuoyuan/renderme360_temp/download_all/MANIFEST.csv
 ```
 
 ### Step 3: Update Configuration for Production
@@ -121,7 +121,7 @@ extraction:
 python extract_streaming_gdrive.py
 
 # Monitor progress in another terminal
-tail -f /ssd2/zhuoyuan/renderme360_temp/download_all/MANIFEST.csv
+tail -f /ssd4/zhuoyuan/renderme360_temp/download_all/MANIFEST.csv
 ```
 
 ## Workflow Details
@@ -151,7 +151,7 @@ tail -f /ssd2/zhuoyuan/renderme360_temp/download_all/MANIFEST.csv
 The pipeline provides comprehensive logging to track extraction progress:
 
 ### Log Files
-- Location: `/ssd2/zhuoyuan/renderme360_temp/download_all/logs/`
+- Location: `/ssd4/zhuoyuan/renderme360_temp/download_all/logs/`
 - Format: `extraction_YYYYMMDD_HHMMSS.log`
 - Contains both console output and detailed debug information
 
@@ -165,19 +165,19 @@ The pipeline provides comprehensive logging to track extraction progress:
 ### Monitoring Logs
 ```bash
 # Real-time monitoring
-tail -f /ssd2/zhuoyuan/renderme360_temp/download_all/logs/extraction_*.log
+tail -f /ssd4/zhuoyuan/renderme360_temp/download_all/logs/extraction_*.log
 
 # Check for errors
-grep ERROR /ssd2/zhuoyuan/renderme360_temp/download_all/logs/extraction_*.log
+grep ERROR /ssd4/zhuoyuan/renderme360_temp/download_all/logs/extraction_*.log
 
 # View summary statistics
-grep "EXTRACTION SUMMARY" -A 20 /ssd2/zhuoyuan/renderme360_temp/download_all/logs/extraction_*.log
+grep "EXTRACTION SUMMARY" -A 20 /ssd4/zhuoyuan/renderme360_temp/download_all/logs/extraction_*.log
 ```
 
 ## Output Structure
 
 ```
-/ssd2/zhuoyuan/renderme360_temp/download_all/
+/ssd4/zhuoyuan/renderme360_temp/download_all/
 ├── subjects/
 │   ├── 0018/
 │   │   ├── s1_all/
@@ -278,13 +278,13 @@ The pipeline automatically resumes from where it left off:
 
 ```bash
 # Check what's completed
-grep completed /ssd2/zhuoyuan/renderme360_temp/download_all/MANIFEST.csv
+grep completed /ssd4/zhuoyuan/renderme360_temp/download_all/MANIFEST.csv
 
 # Re-run extraction (automatically skips completed performances)
 python extract_streaming_gdrive.py
 
 # Force re-extraction of specific performance
-rm -rf /ssd2/zhuoyuan/renderme360_temp/download_all/subjects/0018/s1_all
+rm -rf /ssd4/zhuoyuan/renderme360_temp/download_all/subjects/0018/s1_all
 python extract_streaming_gdrive.py --subject 0018 --performance s1_all
 ```
 
@@ -292,13 +292,13 @@ python extract_streaming_gdrive.py --subject 0018 --performance s1_all
 
 ```bash
 # Watch manifest updates
-watch -n 5 'tail -20 /ssd2/zhuoyuan/renderme360_temp/download_all/MANIFEST.csv'
+watch -n 5 'tail -20 /ssd4/zhuoyuan/renderme360_temp/download_all/MANIFEST.csv'
 
 # Check storage usage
-du -sh /ssd2/zhuoyuan/renderme360_temp/download_all/subjects/*
+du -sh /ssd4/zhuoyuan/renderme360_temp/download_all/subjects/*
 
 # Monitor temp directory
-ls -lh /ssd2/zhuoyuan/renderme360_temp/temp_smc/
+ls -lh /ssd4/zhuoyuan/renderme360_temp/temp_smc/
 ```
 
 ## Differences from Old Pipeline
@@ -381,7 +381,7 @@ Expected extraction times and sizes:
 For issues or questions:
 1. Check the troubleshooting section
 2. Review MANIFEST.csv for error messages
-3. Check logs in `/ssd2/zhuoyuan/renderme360_temp/download_all/logs/`
+3. Check logs in `/ssd4/zhuoyuan/renderme360_temp/download_all/logs/`
 4. Refer to `context.md` for background information
 
 ## Next Steps

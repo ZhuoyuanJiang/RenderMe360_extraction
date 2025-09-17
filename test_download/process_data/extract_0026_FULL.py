@@ -384,7 +384,7 @@ def main():
     parser.add_argument('--performance', type=str, default='e0',
                       help='Performance to extract (e0, s1_all, etc.)')
     parser.add_argument('--output', type=str, 
-                      default='/ssd2/zhuoyuan/renderme360_temp/FULL_EXTRACTION',
+                      default='/ssd4/zhuoyuan/renderme360_temp/FULL_EXTRACTION',
                       help='Output directory')
     parser.add_argument('--separate', action='store_true', default=True,
                       help='Separate anno and raw data into different folders (default: True)')
@@ -393,8 +393,8 @@ def main():
     args = parser.parse_args()
     
     # Paths
-    anno_dir = Path('/ssd2/zhuoyuan/renderme360_temp/test_download/anno')
-    raw_dir = Path('/ssd2/zhuoyuan/renderme360_temp/test_download/raw/0026')
+    anno_dir = Path('/ssd4/zhuoyuan/renderme360_temp/test_download/anno')
+    raw_dir = Path('/ssd4/zhuoyuan/renderme360_temp/test_download/raw/0026')
     
     # Files for the specified performance
     perf = args.performance

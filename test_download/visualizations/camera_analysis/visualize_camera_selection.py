@@ -234,8 +234,8 @@ class CameraVisualization:
 def main():
     """Main execution function."""
     # Paths
-    base_path = Path("/ssd2/zhuoyuan/renderme360_temp/FULL_EXTRACTION_BOTH/0026_s1_all")
-    selection_dir = Path("/ssd2/zhuoyuan/renderme360_temp/test_download/visualizations/camera_selection")
+    base_path = Path("/ssd4/zhuoyuan/renderme360_temp/FULL_EXTRACTION_BOTH/0026_s1_all")
+    selection_dir = Path("/ssd4/zhuoyuan/renderme360_temp/test_download/visualizations/camera_selection")
     output_dir = selection_dir  # Save visualizations in same directory
 
     # Initialize visualizer

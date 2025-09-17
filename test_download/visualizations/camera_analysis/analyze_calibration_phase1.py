@@ -381,10 +381,10 @@ class CameraCalibrationAnalyzer:
 def main():
     """Main execution function."""
     # Path to calibration data
-    calib_path = Path("/ssd2/zhuoyuan/renderme360_temp/FULL_EXTRACTION_BOTH/0026_s1_all/from_anno/calibration/all_cameras.npy")
+    calib_path = Path("/ssd4/zhuoyuan/renderme360_temp/FULL_EXTRACTION_BOTH/0026_s1_all/from_anno/calibration/all_cameras.npy")
 
     # Output directory
-    output_dir = Path("/ssd2/zhuoyuan/renderme360_temp/test_download/visualizations/camera_analysis")
+    output_dir = Path("/ssd4/zhuoyuan/renderme360_temp/test_download/visualizations/camera_analysis")
 
     # Initialize analyzer
     analyzer = CameraCalibrationAnalyzer(calib_path)

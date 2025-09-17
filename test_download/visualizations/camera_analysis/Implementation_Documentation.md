@@ -6,7 +6,7 @@ This document details the implementation process for analyzing RenderMe360 camer
 ## Data Source
 - **Subject**: 0026
 - **Performance**: s1_all (speech performance 1)
-- **Calibration File**: `/ssd2/zhuoyuan/renderme360_temp/FULL_EXTRACTION_BOTH/0026_s1_all/from_anno/calibration/all_cameras.npy`
+- **Calibration File**: `/ssd4/zhuoyuan/renderme360_temp/FULL_EXTRACTION_BOTH/0026_s1_all/from_anno/calibration/all_cameras.npy`
 - **Note**: Camera calibration is **static across all frames** in a performance. The calibration matrices define the camera setup and don't change frame-to-frame.
 
 
@@ -36,10 +36,10 @@ python analyze_calibration_phase1.py
 ```
 
 **Input**:
-- Calibration file: `/ssd2/zhuoyuan/renderme360_temp/FULL_EXTRACTION_BOTH/0026_s1_all/from_anno/calibration/all_cameras.npy`
+- Calibration file: `/ssd4/zhuoyuan/renderme360_temp/FULL_EXTRACTION_BOTH/0026_s1_all/from_anno/calibration/all_cameras.npy`
 - Expected format: Dictionary with camera IDs as keys, each containing 'K', 'D', 'RT' matrices
 
-**Output Files** (saved to `/ssd2/zhuoyuan/renderme360_temp/download_all/visualizations/camera_analysis/`):
+**Output Files** (saved to `/ssd4/zhuoyuan/renderme360_temp/download_all/visualizations/camera_analysis/`):
 - `camera_metrics_60cam.json` - Detailed metrics for each camera (position, yaw, height, FOV, etc.)
 - `camera_summary_stats.json` - Statistical summary and distributions
 - `camera_analysis_report.txt` - Human-readable report
@@ -245,7 +245,7 @@ Created `test_rt_interpretation.py` to test different interpretations:
 
 ## Raw Data Structure and Location
 
-**Location of raw data**: `/ssd2/zhuoyuan/renderme360_temp/FULL_EXTRACTION_BOTH/0026_s1_all/from_anno/calibration/all_cameras.npy`
+**Location of raw data**: `/ssd4/zhuoyuan/renderme360_temp/FULL_EXTRACTION_BOTH/0026_s1_all/from_anno/calibration/all_cameras.npy`
 
 **As documented on RenderMe360 website**, each camera contains exactly three matrices (K, D, RT):
 ```python

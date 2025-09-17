@@ -11,7 +11,7 @@ def extract_all_raw_data():
     """Extract all raw calibration data and save to JSON."""
 
     # Load the calibration file
-    calib_path = "/ssd2/zhuoyuan/renderme360_temp/FULL_EXTRACTION_BOTH/0026_s1_all/from_anno/calibration/all_cameras.npy"
+    calib_path = "/ssd4/zhuoyuan/renderme360_temp/FULL_EXTRACTION_BOTH/0026_s1_all/from_anno/calibration/all_cameras.npy"
     print(f"Loading: {calib_path}")
 
     # Load the data

@@ -220,8 +220,8 @@ def main():
     """Main validation function."""
 
     # Define paths
-    original_base = Path('/ssd2/zhuoyuan/renderme360_temp/FULL_EXTRACTION_BOTH')
-    new_base = Path('/ssd2/zhuoyuan/renderme360_temp/test_download/subjects/0026')
+    original_base = Path('/ssd4/zhuoyuan/renderme360_temp/FULL_EXTRACTION_BOTH')
+    new_base = Path('/ssd4/zhuoyuan/renderme360_temp/test_download/subjects/0026')
 
     # Performances to check
     performances = [

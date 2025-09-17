@@ -19,7 +19,7 @@ def create_all_cameras_grid(subject_id="0026", frame_id=100, output_path=None):
         output_path: Where to save the visualization
     """
     # Path to subject data
-    base_dir = Path(f'/ssd2/zhuoyuan/renderme360_temp/download_all/subjects/{subject_id}')
+    base_dir = Path(f'/ssd4/zhuoyuan/renderme360_temp/download_all/subjects/{subject_id}')
     images_dir = base_dir / "s3_all" / "images"
     
     if not images_dir.exists():
@@ -106,7 +106,7 @@ if __name__ == "__main__":
     parser.add_argument('--subject', default='0026', help='Subject ID')
     parser.add_argument('--frame', type=int, default=100, help='Frame number to display')
     parser.add_argument('--output', 
-                       default='/ssd2/zhuoyuan/renderme360_temp/download_all/visualizations/camera_analysis/all_38_cameras_grid.png',
+                       default='/ssd4/zhuoyuan/renderme360_temp/download_all/visualizations/camera_analysis/all_38_cameras_grid.png',
                        help='Output path for visualization')
     
     args = parser.parse_args()

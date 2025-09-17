@@ -17,12 +17,12 @@ from datetime import datetime
 class AvatarDataExtractor:
     def __init__(self, subject_id='0026', output_base=None):
         self.subject_id = subject_id
-        self.anno_dir = Path('/ssd2/zhuoyuan/renderme360_temp/test_download/anno')
-        self.raw_dir = Path(f'/ssd2/zhuoyuan/renderme360_temp/test_download/raw/{subject_id}')
+        self.anno_dir = Path('/ssd4/zhuoyuan/renderme360_temp/test_download/anno')
+        self.raw_dir = Path(f'/ssd4/zhuoyuan/renderme360_temp/test_download/raw/{subject_id}')
         
         # Put output in a research-friendly location
         if output_base is None:
-            self.output_base = Path(f'/ssd2/zhuoyuan/renderme360_temp/avatar_research_data/{subject_id}')
+            self.output_base = Path(f'/ssd4/zhuoyuan/renderme360_temp/avatar_research_data/{subject_id}')
         else:
             self.output_base = Path(output_base) / subject_id
         

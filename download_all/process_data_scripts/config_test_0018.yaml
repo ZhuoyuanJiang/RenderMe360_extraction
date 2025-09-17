@@ -36,16 +36,16 @@ extraction:
 # Storage Configuration  
 storage:
   # Use same temp directory
-  temp_dir: "/ssd2/zhuoyuan/renderme360_temp/temp_smc/"
+  temp_dir: "/ssd4/zhuoyuan/renderme360_temp/temp_smc/"
   
   # Output to 0018_temp for comparison
-  output_dir: "/ssd2/zhuoyuan/renderme360_temp/download_all/subjects/0018_temp/"
+  output_dir: "/ssd4/zhuoyuan/renderme360_temp/download_all/subjects/0018_temp/"
   
   # Use different manifest for test
-  manifest_path: "/ssd2/zhuoyuan/renderme360_temp/download_all/MANIFEST_test.csv"
+  manifest_path: "/ssd4/zhuoyuan/renderme360_temp/download_all/MANIFEST_test.csv"
   
   # Separate log directory
-  log_dir: "/ssd2/zhuoyuan/renderme360_temp/download_all/logs/"
+  log_dir: "/ssd4/zhuoyuan/renderme360_temp/download_all/logs/"
   
 # Processing Configuration
 processing:

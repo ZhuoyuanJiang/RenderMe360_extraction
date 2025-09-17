@@ -420,7 +420,7 @@ Based on audio-driven 3D avatar project, you might need:
 **Recommended extraction:**
 ```bash
 # Extract one speech performance fully to understand the data
-python extract_0026_FULL.py --performance s1_all --output /ssd2/zhuoyuan/avatar_research_data
+python extract_0026_FULL.py --performance s1_all --output /ssd4/zhuoyuan/avatar_research_data
 
 # Then use the research-optimized script for remaining data
 python extract_for_avatar_research.py
@@ -430,7 +430,7 @@ python extract_for_avatar_research.py
 
 ### NEW: Separated Structure (Default)
 
-Output location: `/ssd2/zhuoyuan/renderme360_temp/FULL_EXTRACTION/`
+Output location: `/ssd4/zhuoyuan/renderme360_temp/FULL_EXTRACTION/`
 
 ```
 FULL_EXTRACTION/
