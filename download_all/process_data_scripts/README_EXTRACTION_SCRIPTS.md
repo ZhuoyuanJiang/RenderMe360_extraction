@@ -18,8 +18,8 @@ This is a streaming extraction pipeline for downloading and processing the Rende
 ### 1. Python Environment
 ```bash
 # Create and activate conda environment
-conda create -n RenderMe360_Streaming python=3.9 -y
-conda activate RenderMe360_Streaming
+conda create -n RenderMe360_Data_Processing python=3.9 -y
+conda activate RenderMe360_Data_Processing
 
 # Install dependencies (or use requirements.txt if provided)
 pip install opencv-python numpy tqdm pydub h5py pandas matplotlib pyyaml
@@ -27,7 +27,7 @@ pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
 pip install plyfile  # Optional, for 3D mesh extraction
 
 # IMPORTANT: Always activate the environment before running scripts
-conda activate RenderMe360_Streaming
+conda activate RenderMe360_Data_Processing
 ```
 
 ### 2. Rclone Configuration
@@ -68,7 +68,7 @@ Extract subject 0018 with all 60 cameras:
 
 ```bash
 # IMPORTANT: Always activate environment first
-conda activate RenderMe360_Streaming
+conda activate RenderMe360_Data_Processing
 
 # Run extraction for first subject
 python extract_streaming_gdrive.py --config config.yaml # put only one subject in your config.yaml for now
