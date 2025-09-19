@@ -1,8 +1,21 @@
 #!/usr/bin/env python3
 """
 RenderMe360 21ID Dataset Streaming Extraction Script
-Combines complete extraction from extract_0026_FULL_both.py with 
+Combines complete extraction from extract_0026_FULL_both.py with
 Google Drive streaming from extract_streaming_gdrive.py
+
+PERFORMANCE OPTIMIZATION NOTE:
+==============================
+This script uses an optimized version of the official RenderMe360 reader
+(renderme_360_reader_optimized.py) which provides 5.6x faster mask extraction
+while producing bit-for-bit identical output. The optimization decodes masks
+directly as grayscale instead of decoding as color then converting.
+
+To use the original reader instead, simply change the import on line 46-48:
+  from renderme_360_reader import SMCReader  # Original (slower)
+  # from renderme_360_reader_optimized import SMCReader  # Optimized (5.6x faster)
+
+See patch_mask_rationale.md for detailed performance analysis and verification.
 
 This version:
 - Downloads both anno and raw SMC bundles from Google Drive
@@ -30,7 +43,10 @@ import pandas as pd
 
 # Add current directory to path for importing the reader
 sys.path.append(str(Path(__file__).parent))
-from renderme_360_reader import SMCReader
+
+# Reader selection: Choose between original and optimized version
+# from renderme_360_reader import SMCReader  # Original reader (slower mask extraction)
+from renderme_360_reader_optimized import SMCReader  # Optimized reader (5.6x faster masks, identical output)
 
 
 class RenderMe360ExtractorFull:
@@ -176,62 +192,110 @@ class RenderMe360ExtractorFull:
     def download_smc_bundle(self, subject_id, performance, data_type='both'):
         """
         Download SMC bundles from Google Drive using rclone.
-        
+        Tries normal filename first, then falls back to "Copy of " prefix.
+        Checks if files already exist locally before attempting download.
+
         Args:
             subject_id: Subject ID (e.g., "0026")
             performance: Performance name (e.g., "s1_all")
             data_type: 'anno', 'raw', or 'both'
-            
+
         Returns:
             Tuple of (anno_path, raw_path) or None for missing files
         """
         temp_dir = Path(self.config['storage']['temp_dir'])
         remote_name = self.config['google_drive']['remote_name']
         root_folder_id = self.config['google_drive']['root_folder_id']
-        
+
         anno_path = None
         raw_path = None
-        
-        # Download anno bundle if needed
+
+        # Check and handle anno bundle
         if data_type in ['anno', 'both']:
             anno_bundle = f"{subject_id}_{performance}_anno.smc"
-            anno_remote = f"anno/{subject_id}/{anno_bundle}"
-            anno_local = temp_dir / anno_bundle
-            
-            if self._download_with_rclone(anno_remote, anno_local, root_folder_id):
+            anno_local = temp_dir / anno_bundle  # Always save without prefix
+
+            # Check if file already exists locally
+            if anno_local.exists():
+                size_gb = anno_local.stat().st_size / (1024**3)
+                self.logger.info(f"✓ Anno bundle already exists: {anno_bundle} ({size_gb:.1f} GB)")
                 anno_path = anno_local
-                self.logger.info(f"✓ Downloaded anno bundle: {anno_bundle}")
             else:
-                self.logger.warning(f"✗ Failed to download anno bundle: {anno_bundle}")
-                
-        # Download raw bundle if needed  
+                # Try downloading from Google Drive
+                anno_remote_normal = f"anno/{subject_id}/{anno_bundle}"
+                anno_remote_prefixed = f"anno/{subject_id}/Copy of {anno_bundle}"
+
+                # Try normal filename first
+                self.logger.debug(f"Trying normal anno file: {anno_remote_normal}")
+                if self._download_with_rclone(anno_remote_normal, anno_local, root_folder_id):
+                    anno_path = anno_local
+                    self.logger.info(f"✓ Downloaded anno bundle: {anno_bundle}")
+                else:
+                    # Fallback to "Copy of " version
+                    self.logger.debug(f"Normal file not found, trying prefixed: {anno_remote_prefixed}")
+                    if self._download_with_rclone(anno_remote_prefixed, anno_local, root_folder_id):
+                        anno_path = anno_local
+                        self.logger.info(f"✓ Downloaded anno bundle: {anno_bundle} (from 'Copy of' version)")
+                    else:
+                        self.logger.warning(f"✗ Failed to download anno bundle: {anno_bundle} (tried both normal and 'Copy of' versions)")
+
+        # Check and handle raw bundle
         if data_type in ['raw', 'both']:
             raw_bundle = f"{subject_id}_{performance}_raw.smc"
-            raw_remote = f"raw/{subject_id}/{raw_bundle}"
-            raw_local = temp_dir / raw_bundle
-            
-            if self._download_with_rclone(raw_remote, raw_local, root_folder_id):
+            raw_local = temp_dir / raw_bundle  # Always save without prefix
+
+            # Check if file already exists locally
+            if raw_local.exists():
+                size_gb = raw_local.stat().st_size / (1024**3)
+                self.logger.info(f"✓ Raw bundle already exists: {raw_bundle} ({size_gb:.1f} GB)")
                 raw_path = raw_local
-                self.logger.info(f"✓ Downloaded raw bundle: {raw_bundle}")
             else:
-                self.logger.warning(f"✗ Failed to download raw bundle: {raw_bundle}")
-                
+                # Try downloading from Google Drive
+                raw_remote_normal = f"raw/{subject_id}/{raw_bundle}"
+                raw_remote_prefixed = f"raw/{subject_id}/Copy of {raw_bundle}"
+
+                # Try normal filename first
+                self.logger.debug(f"Trying normal raw file: {raw_remote_normal}")
+                if self._download_with_rclone(raw_remote_normal, raw_local, root_folder_id):
+                    raw_path = raw_local
+                    self.logger.info(f"✓ Downloaded raw bundle: {raw_bundle}")
+                else:
+                    # Fallback to "Copy of " version
+                    self.logger.debug(f"Normal file not found, trying prefixed: {raw_remote_prefixed}")
+                    if self._download_with_rclone(raw_remote_prefixed, raw_local, root_folder_id):
+                        raw_path = raw_local
+                        self.logger.info(f"✓ Downloaded raw bundle: {raw_bundle} (from 'Copy of' version)")
+                    else:
+                        self.logger.warning(f"✗ Failed to download raw bundle: {raw_bundle} (tried both normal and 'Copy of' versions)")
+
         return anno_path, raw_path
         
     def _download_with_rclone(self, remote_path, local_path, root_folder_id):
         """
         Execute rclone download for a single file/bundle.
-        
+
+        Args:
+            remote_path: Path on Google Drive (e.g., "anno/0026/Copy of 0026_s1_all_anno.smc")
+            local_path: Full local path where we want to save the file
+                       (e.g., "/ssd4/.../temp_smc/0026_s1_all_anno.smc" - WITHOUT "Copy of")
+            root_folder_id: Google Drive folder ID for the dataset root
+
         Returns:
             True if successful, False otherwise
+
+        Note:
+            Uses 'rclone copyto' instead of 'rclone copy' to ensure the file is saved
+            with the exact filename specified in local_path, regardless of the source filename.
+            This handles cases where the remote file has "Copy of " prefix but we want
+            to save it locally without that prefix.
         """
         remote_name = self.config['google_drive']['remote_name']
-        
-        # Build rclone command
+
+        # Build rclone command - use copyto to rename during download
         cmd = [
-            'rclone', 'copy',
-            f'{remote_name}:{remote_path}',
-            str(local_path.parent),
+            'rclone', 'copyto',  # copyto allows renaming during download
+            f'{remote_name}:{remote_path}',  # Source: e.g., "vllab13:anno/0026/Copy of 0026_s1_all_anno.smc"
+            str(local_path),  # Destination: e.g., "/ssd4/.../temp_smc/0026_s1_all_anno.smc" (clean name)
             '--drive-root-folder-id', root_folder_id,
             '-P',  # Show progress
             '--drive-acknowledge-abuse',  # Accept large files
