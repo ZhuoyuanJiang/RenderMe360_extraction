@@ -26,7 +26,8 @@ UNIFIED_EXTRACTION/
 test_separated/
 sampled_overview/
 avatar_research_data/
-test_download/subjects/
+test_download/subjects/*
+!test_download/subjects/data_summary.md
 
 # Download pipeline data (but keep reports and manifests)
 download_all/subjects/*/s*_all/
